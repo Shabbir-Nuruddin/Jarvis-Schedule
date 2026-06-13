@@ -1,0 +1,2505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shabbir's 30-Day Gauntlet</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0a0a0a;--bg2:#111;--bg3:#181818;--bg4:#222;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#f0ede8;--muted:#777;
+  --accent:#e8c547;--accent2:#c9a820;
+  --green:#3ecf8e;--red:#f06565;--blue:#5b9cf6;--pink:#e879a0;--purple:#a78bfa;
+  --r:10px;--r2:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+.app{display:flex;height:100vh;overflow:hidden;}
+
+/* SIDEBAR */
+.sidebar{width:220px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;}
+.sidebar-logo{padding:22px 20px 14px;border-bottom:1px solid var(--border);}
+.logo-text{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;color:var(--accent);}
+.logo-sub{font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:0.5px;}
+.sidebar-stats{padding:12px 14px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.ms{background:var(--bg3);border-radius:8px;padding:8px 10px;}
+.ms-val{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);line-height:1;}
+.ms-lbl{font-size:10px;color:var(--muted);margin-top:2px;}
+.sidebar-nav{padding:10px 8px;flex:1;overflow-y:auto;}
+.ni{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13.5px;color:var(--muted);transition:all 0.15s;margin-bottom:2px;}
+.ni:hover{background:var(--bg3);color:var(--text);}
+.ni.active{background:var(--accent);color:#000;font-weight:600;}
+.ni-icon{font-size:15px;width:18px;text-align:center;}
+.sidebar-footer{padding:12px 16px;border-top:1px solid var(--border);}
+.xp-row{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px;}
+.xp-bg{background:var(--bg4);border-radius:10px;height:5px;overflow:hidden;}
+.xp-fill{height:100%;background:var(--accent);border-radius:10px;transition:width 0.5s;}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:14px 26px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:sticky;top:0;z-index:10;}
+.topbar-left h2{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.5px;}
+.topbar-left p{font-size:12px;color:var(--muted);margin-top:1px;}
+.sbadge{background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:5px 13px;font-size:12px;color:var(--accent);font-weight:600;}
+.page{padding:22px 26px;display:none;}
+.page.active{display:block;}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:18px 20px;margin-bottom:14px;}
+.card-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px;font-weight:500;}
+.card-h{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.5px;margin-bottom:12px;}
+
+/* TIME BLOCKS */
+.cal-hdr{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.cal-lbl{font-family:'Bebas Neue',sans-serif;font-size:28px;flex:1;}
+.dnav button{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 14px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;transition:all 0.15s;}
+.dnav button:hover{border-color:var(--accent);color:var(--accent);}
+.prog-pill{background:var(--bg4);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--muted);}
+.prog-pill span{color:var(--accent);font-weight:600;}
+.tblocks{display:flex;flex-direction:column;gap:7px;}
+.tb{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px;display:flex;gap:13px;align-items:flex-start;transition:border-color 0.15s;}
+.tb:hover{border-color:var(--border2);}
+.tb.done{opacity:0.38;}
+.tb.done .tb-title{text-decoration:line-through;}
+.tb-time{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);min-width:52px;padding-top:3px;}
+.tb-body{flex:1;}
+.tb-tags{display:flex;gap:4px;margin-bottom:4px;flex-wrap:wrap;}
+.tag{font-size:10px;padding:2px 7px;border-radius:6px;font-weight:500;}
+.tag-fitness{background:rgba(62,207,142,0.12);color:var(--green);}
+.tag-business{background:rgba(91,156,246,0.12);color:var(--blue);}
+.tag-mindset{background:rgba(232,197,71,0.12);color:var(--accent);}
+.tag-diet{background:rgba(240,101,101,0.1);color:var(--red);}
+.tag-social{background:rgba(232,121,160,0.12);color:var(--pink);}
+.tag-quran{background:rgba(167,139,250,0.12);color:var(--purple);}
+.tag-language{background:rgba(251,191,36,0.12);color:#fbbf24;}
+.tb-title{font-size:14px;font-weight:500;margin-bottom:3px;}
+.tb-desc{font-size:12.5px;color:var(--muted);line-height:1.55;}
+.chk{width:23px;height:23px;border-radius:50%;border:1.5px solid var(--border2);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:2px;transition:all 0.15s;color:transparent;}
+.chk:hover{border-color:var(--accent);}
+.chk.done{background:var(--green);border-color:var(--green);color:#fff;}
+
+/* MOOD */
+.mood-row{display:flex;gap:7px;margin:4px 0;}
+.mb{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 4px;text-align:center;cursor:pointer;transition:all 0.15s;font-size:19px;}
+.mb:hover{border-color:var(--border2);transform:translateY(-2px);}
+.mb.sel{border:2px solid var(--accent);background:rgba(232,197,71,0.08);}
+.mb-lbl{font-size:10px;color:var(--muted);margin-top:3px;}
+.mood-msg{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.5;min-height:18px;}
+.mood-msg.fire{color:var(--accent);font-weight:500;}
+
+/* NEWS */
+.ni2{border-bottom:1px solid var(--border);padding:13px 0;}
+.ni2:last-child{border-bottom:none;}
+.ni2-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:5px;}
+.ni2-title{font-size:14px;font-weight:500;line-height:1.4;}
+.ncat{font-size:10px;padding:2px 8px;border-radius:6px;background:var(--bg4);color:var(--muted);flex-shrink:0;margin-top:2px;}
+.ni2-summary{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:6px;}
+.ni2-bullets{margin:6px 0 8px;padding-left:14px;}
+.ni2-bullets li{font-size:13px;color:var(--text);line-height:1.6;margin-bottom:3px;}
+.ni2-src{font-size:11px;color:var(--muted);margin-top:4px;}
+
+/* WORKOUT */
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.excrd{background:var(--bg3);border-radius:var(--r);padding:13px 15px;border:1px solid var(--border);}
+.ex-name{font-size:14px;font-weight:500;margin-bottom:3px;}
+.ex-sets{font-size:12px;color:var(--accent);font-weight:600;margin-bottom:4px;font-family:'DM Mono',monospace;}
+.ex-note{font-size:12px;color:var(--muted);line-height:1.45;}
+.ngrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.nc-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:9px;}
+.nc-title.eat{color:var(--green);}
+.nc-title.avoid{color:var(--red);}
+.ni3{font-size:13px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:7px;align-items:center;}
+.ni3:last-child{border-bottom:none;}
+.wbar{margin-top:12px;}
+.wbar-lbl{font-size:12px;color:var(--muted);margin-bottom:7px;}
+.glasses{display:flex;gap:6px;}
+.glass{font-size:22px;cursor:pointer;transition:all 0.15s;filter:grayscale(1) opacity(0.35);}
+.glass.filled{filter:none;}
+
+/* LANGUAGE */
+.lang-tabs{display:flex;gap:8px;margin-bottom:16px;}
+.ltab{padding:7px 18px;border-radius:20px;border:1px solid var(--border);font-size:13px;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.ltab.active{background:var(--accent);color:#000;font-weight:600;border-color:var(--accent);}
+.lang-section{display:none;}
+.lang-section.active{display:block;}
+
+/* QURAN */
+.qplan-day{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px;margin-bottom:8px;}
+.qplan-day-hdr{font-size:13px;font-weight:500;margin-bottom:5px;color:var(--purple);}
+.qplan-day-desc{font-size:12.5px;color:var(--muted);line-height:1.55;}
+
+/* AI CHAT */
+.chat-hist{background:var(--bg3);border-radius:var(--r);padding:12px;min-height:200px;max-height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:9px;}
+.cmsg{padding:10px 13px;border-radius:10px;font-size:13.5px;line-height:1.6;max-width:90%;}
+.cmsg.user{background:var(--bg4);align-self:flex-end;}
+.cmsg.coach{background:rgba(232,197,71,0.08);border:1px solid rgba(232,197,71,0.15);align-self:flex-start;}
+.cmsg.thinking{color:var(--muted);font-style:italic;}
+.cinput-row{display:flex;gap:8px;margin-top:10px;}
+.cinput-row textarea{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13.5px;resize:none;min-height:50px;outline:none;transition:border-color 0.15s;}
+.cinput-row textarea:focus{border-color:var(--accent);}
+.btn{background:transparent;border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:8px 16px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.15s;}
+.btn:hover{border-color:var(--accent);color:var(--accent);}
+.btn.primary{background:var(--accent);color:#000;border-color:var(--accent);font-weight:600;}
+.btn.primary:hover{background:var(--accent2);}
+.qbtns{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px;}
+
+/* PROGRESS */
+.pcols3{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:14px;}
+.pstat{text-align:center;}
+.pstat-val{font-family:'Bebas Neue',sans-serif;font-size:52px;line-height:1;}
+.pstat-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;}
+.sgrid{display:flex;flex-wrap:wrap;gap:5px;}
+.sdot{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;border:1px solid var(--border);color:var(--muted);}
+.sdot.done{background:var(--green);border-color:var(--green);color:#fff;}
+.sdot.today{border:2px solid var(--accent);color:var(--accent);}
+.sdot.partial{background:rgba(62,207,142,0.2);border-color:rgba(62,207,142,0.3);color:var(--green);}
+.wchart{display:flex;align-items:flex-end;gap:6px;height:90px;}
+.wkcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;}
+.wkbar{width:100%;border-radius:4px 4px 0 0;background:var(--bg4);position:relative;overflow:hidden;min-height:4px;}
+.wkfill{position:absolute;bottom:0;width:100%;background:var(--accent);opacity:0.8;border-radius:4px 4px 0 0;transition:height 0.4s;}
+.wklbl{font-size:10px;color:var(--muted);}
+.achlist{display:flex;flex-direction:column;gap:8px;}
+.ach{display:flex;align-items:center;gap:10px;background:var(--bg3);border-radius:8px;padding:10px 14px;border:1px solid var(--border);}
+.ach-icon{font-size:18px;}
+.ach.locked{opacity:0.3;filter:grayscale(1);}
+
+/* SETTINGS */
+.set-section{margin-bottom:22px;}
+.set-section h3{font-size:11px;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:10px;font-weight:500;}
+.set-row{display:flex;gap:9px;margin-bottom:9px;}
+.set-row input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13.5px;outline:none;transition:border-color 0.15s;}
+.set-row input:focus{border-color:var(--accent);}
+.saved{font-size:12px;color:var(--green);display:none;}
+.refl-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:11px 13px;}
+.refl-box textarea{width:100%;background:transparent;border:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13.5px;resize:none;min-height:65px;outline:none;line-height:1.6;}
+.refl-box textarea::placeholder{color:var(--muted);}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:13px;}
+.chip{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:12.5px;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.chip:hover{border-color:var(--accent);color:var(--accent);}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:10px;}
+
+/* ── VOICE COACH MODES ────────────────────────────────────────────────── */
+#page-spanish-coach,#page-accent-coach{padding:0;}
+#page-spanish-coach.active,#page-accent-coach.active{
+  display:flex!important;flex-direction:column;
+  position:fixed;top:56px;left:0;right:0;bottom:0;z-index:100;
+  background:var(--bg);overflow:hidden;
+}
+@media(max-width:768px){
+  #page-spanish-coach.active,#page-accent-coach.active{top:48px;}
+}
+@media(min-width:769px){
+  #page-spanish-coach.active,#page-accent-coach.active{left:220px;}
+}
+.vc-wrap{display:flex;flex-direction:column;height:100%;overflow:hidden;}
+.vc-hdr{padding:12px 18px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.vc-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.5px;color:var(--accent);}
+.vc-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.vc-stats{display:flex;gap:7px;padding:7px 18px;flex-shrink:0;border-bottom:1px solid var(--border);}
+.vc-stat{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:5px 9px;text-align:center;min-width:48px;}
+.vc-stat strong{font-family:'Bebas Neue',sans-serif;font-size:19px;color:var(--accent);display:block;line-height:1;}
+.vc-stat span{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
+.vc-body{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:9px;}
+.vc-msg{padding:9px 13px;border-radius:12px;font-size:13.5px;line-height:1.6;max-width:90%;word-break:break-word;}
+.vc-msg.ai{background:rgba(232,197,71,0.08);border:1px solid rgba(232,197,71,0.18);align-self:flex-start;}
+.vc-msg.user{background:var(--bg3);border:1px solid var(--border2);align-self:flex-end;}
+.vc-msg.note{background:rgba(91,156,246,0.08);border:1px solid rgba(91,156,246,0.2);align-self:flex-start;font-size:12.5px;color:var(--blue);}
+.vc-msg.sys{background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);align-self:center;font-size:12px;color:var(--purple);text-align:center;max-width:100%;}
+.vc-summary{background:rgba(232,197,71,0.06);border:1px solid rgba(232,197,71,0.22);border-radius:12px;padding:13px 15px;align-self:stretch;}
+.vc-summary h3{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--accent);margin-bottom:7px;}
+.vc-summary-line{font-size:12.5px;color:var(--text);padding:3px 0;border-bottom:1px solid var(--border);line-height:1.5;}
+.vc-summary-line:last-child{border-bottom:none;}
+.vc-feedback{background:var(--bg2);border-top:1px solid var(--border);padding:9px 16px;flex-shrink:0;}
+.vc-score-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.vc-score-num{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--accent);line-height:1;min-width:52px;}
+.vc-score-track{flex:1;height:5px;background:var(--bg4);border-radius:10px;overflow:hidden;}
+.vc-score-fill{height:100%;background:var(--accent);border-radius:10px;transition:width 0.5s;}
+.vc-issue{font-size:12.5px;color:var(--text);margin-bottom:3px;}
+.vc-repeat{font-size:13px;color:var(--accent);font-weight:600;padding:6px 10px;background:rgba(232,197,71,0.07);border-radius:8px;margin:4px 0;}
+.vc-tip{font-size:12px;color:var(--muted);line-height:1.5;}
+.vc-transcript{min-height:15px;font-size:11.5px;color:var(--muted);text-align:center;padding:2px 16px;flex-shrink:0;font-style:italic;}
+.vc-controls{padding:10px 16px 14px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:7px;border-top:1px solid var(--border);}
+.vc-btn{width:80px;height:80px;border-radius:50%;border:3px solid var(--accent);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:28px;background:rgba(232,197,71,0.1);color:var(--accent);transition:all 0.18s;touch-action:none;user-select:none;-webkit-user-select:none;}
+.vc-btn.listening{background:var(--red)!important;border-color:var(--red)!important;color:#fff!important;animation:vc-pulse 1.1s ease-out infinite;}
+.vc-btn.loading{background:var(--bg3)!important;border-color:var(--muted)!important;color:var(--muted)!important;animation:none!important;}
+.vc-hint{font-size:11.5px;color:var(--muted);text-align:center;}
+.vc-newbtn{background:transparent;border:1px solid var(--border2);color:var(--muted);border-radius:7px;padding:5px 11px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.15s;flex-shrink:0;}
+.vc-newbtn:hover{border-color:var(--accent);color:var(--accent);}
+@keyframes vc-pulse{
+  0%{box-shadow:0 0 0 0 rgba(240,101,101,0.55);}
+  70%{box-shadow:0 0 0 16px rgba(240,101,101,0);}
+  100%{box-shadow:0 0 0 0 rgba(240,101,101,0);}
+}
+@media(max-width:768px){
+  .vc-hdr{padding:9px 13px;}
+  .vc-stats{padding:6px 13px;gap:5px;}
+  .vc-body{padding:10px 11px;}
+  .vc-feedback{padding:7px 13px;}
+  .vc-controls{padding:9px 13px 13px;}
+  .vc-btn{width:88px;height:88px;font-size:32px;}
+}
+
+/* HAMBURGER */
+.ham-btn{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:5px;align-items:center;justify-content:center;flex-shrink:0;}
+.ham-btn span{width:22px;height:2px;background:var(--text);border-radius:2px;display:block;}
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:998;}
+.sb-overlay.open{display:block;}
+
+/* MOBILE */
+@media(max-width:768px){
+  .app{flex-direction:column;}
+  .sidebar{position:fixed;top:0;left:0;height:100%;z-index:999;transform:translateX(-100%);transition:transform 0.25s ease;width:260px;overflow-y:auto;}
+  .sidebar.open{transform:translateX(0);}
+  .ham-btn{display:flex;}
+  .main{width:100%;height:100vh;overflow-y:auto;}
+  .topbar{padding:12px 14px;gap:8px;}
+  .topbar-left h2{font-size:17px;}
+  .topbar-left p{font-size:11px;}
+  .page{padding:14px 12px;}
+  .card{padding:14px 14px;}
+  .wgrid{grid-template-columns:1fr;}
+  .ngrid{grid-template-columns:1fr;}
+  .pcols3{grid-template-columns:repeat(3,1fr);}
+  .tb{padding:11px 12px;gap:10px;}
+  .tb-time{font-size:10px;min-width:44px;}
+  .tb-title{font-size:13px;}
+  .tb-desc{font-size:12px;}
+  .chk{width:30px;height:30px;font-size:14px;}
+  .chat-hist{max-height:240px;}
+  .lang-tabs{flex-wrap:wrap;gap:6px;}
+  .ltab{font-size:12px;padding:6px 14px;}
+  .cinput-row textarea{font-size:13px;}
+  .qbtns{gap:5px;}
+  .btn{padding:7px 12px;font-size:12px;}
+  #quran-grid{grid-template-columns:repeat(5,1fr)!important;}
+  .sidebar-stats{grid-template-columns:1fr 1fr 1fr 1fr;}
+  .cal-lbl{font-size:20px;}
+  #ov-wrap{bottom:12px;right:12px;}
+}
+</style>
+</head>
+<body>
+<div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+<div class="app">
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text">GAUNTLET</div>
+    <div class="logo-sub">Shabbir · 30-Day Transformation</div>
+  </div>
+  <div class="sidebar-stats">
+    <div class="ms"><div class="ms-val" id="s-day">—</div><div class="ms-lbl">Day</div></div>
+    <div class="ms"><div class="ms-val" id="s-streak">0</div><div class="ms-lbl">Streak</div></div>
+    <div class="ms"><div class="ms-val" id="s-xp">0</div><div class="ms-lbl">XP</div></div>
+    <div class="ms"><div class="ms-val" id="s-done">0</div><div class="ms-lbl">Done</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="ni active" onclick="goPage('schedule',this)"><span class="ni-icon">📅</span> Schedule</div>
+    <div class="ni" onclick="goPage('news',this)"><span class="ni-icon">📰</span> News</div>
+    <div class="ni" onclick="goPage('workout',this)"><span class="ni-icon">💪</span> Workout</div>
+    <div class="ni" onclick="goPage('quran',this)"><span class="ni-icon">📖</span> Quran</div>
+    <div class="ni" onclick="goPage('languages',this)"><span class="ni-icon">🌐</span> Languages</div>
+    <div class="ni" onclick="goPage('coach',this)"><span class="ni-icon">🎯</span> AI Coach</div>
+    <div class="ni" onclick="goPage('learn',this)"><span class="ni-icon">📚</span> Learn</div>
+    <div class="ni" onclick="goPage('progress',this)"><span class="ni-icon">📈</span> Progress</div>
+    <div class="ni" onclick="goPage('spanish-coach',this)"><span class="ni-icon">🇪🇸</span> Spanish</div>
+    <div class="ni" onclick="goPage('accent-coach',this)"><span class="ni-icon">🎯</span> Accent</div>
+    <div class="ni" onclick="goPage('settings',this)"><span class="ni-icon">⚙️</span> Settings</div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="xp-row"><span>Level <strong id="s-level">1</strong></span><span id="s-xp-to">100 to next</span></div>
+    <div class="xp-bg"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<div class="main">
+<div class="topbar">
+  <button class="ham-btn" onclick="openSidebar()" aria-label="Menu"><span></span><span></span><span></span></button>
+  <div class="topbar-left">
+    <h2 id="top-title">Today's Schedule</h2>
+    <p id="top-date">—</p>
+  </div>
+  <div><span class="sbadge" id="streak-badge">🔥 0 days</span></div>
+</div>
+
+<!-- SCHEDULE -->
+<div class="page active" id="page-schedule">
+  <div class="cal-hdr">
+    <div class="dnav"><button onclick="changeDay(-1)">← Prev</button></div>
+    <div class="cal-lbl" id="cal-lbl">Day 1</div>
+    <div class="prog-pill">Done: <span id="cal-prog">0/0</span></div>
+    <div class="dnav"><button onclick="changeDay(1)">Next →</button></div>
+  </div>
+  <div class="tblocks" id="tblocks"></div>
+  <div class="card" style="margin-top:14px;">
+    <div class="card-lbl">Mood Check-in</div>
+    <div class="mood-row" id="mood-row">
+      <div class="mb" onclick="setMood(0)"><div>😴</div><div class="mb-lbl">Dead</div></div>
+      <div class="mb" onclick="setMood(1)"><div>😕</div><div class="mb-lbl">Meh</div></div>
+      <div class="mb" onclick="setMood(2)"><div>😐</div><div class="mb-lbl">OK</div></div>
+      <div class="mb" onclick="setMood(3)"><div>😤</div><div class="mb-lbl">Hungry</div></div>
+      <div class="mb" onclick="setMood(4)"><div>🔥</div><div class="mb-lbl">Locked</div></div>
+    </div>
+    <div class="mood-msg" id="mood-msg"></div>
+  </div>
+  <div class="card">
+    <div class="card-lbl">Daily Reflection</div>
+    <div class="refl-box"><textarea id="refl-input" placeholder="One honest sentence about today."></textarea></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+      <button class="btn primary" onclick="saveRefl()">Save</button>
+      <span class="saved" id="refl-saved">Saved ✓</span>
+    </div>
+  </div>
+</div>
+
+<!-- NEWS -->
+<div class="page" id="page-news">
+  <div class="card">
+    <div class="card-lbl">Today's Intelligence Brief</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:13px;">AI reads and summarises the news for you — actual key points, not links. Business, startups, AI, Singapore/SEA, world events relevant to you.</div>
+    <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;">
+      <button class="btn primary" onclick="loadNews()" id="news-btn">Load Today's News</button>
+      <span id="news-status" style="font-size:12px;color:var(--muted);"></span>
+    </div>
+  </div>
+  <div id="news-container"></div>
+</div>
+
+<!-- WORKOUT -->
+<div class="page" id="page-workout">
+  <div class="card">
+    <div class="card-lbl">Today's Training</div>
+    <div class="card-h" id="wk-name">—</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:16px;" id="wk-desc"></div>
+    <div class="wgrid" id="wk-exs"></div>
+  </div>
+  <div class="card">
+    <div class="card-lbl">Workout AI Coach</div>
+    <div class="qbtns">
+      <button class="btn" onclick="qWorkout('How do I do a proper pull-up with no momentum?')">Pull-up form</button>
+      <button class="btn" onclick="qWorkout('I can only do 2 pull-ups. Give me a 4-week plan.')">Build pull-ups</button>
+      <button class="btn" onclick="qWorkout('Best ab routine I can do at home to get visible abs.')">Abs plan</button>
+      <button class="btn" onclick="qWorkout('Sore from yesterday. What do I do?')">Sore muscles</button>
+    </div>
+    <div class="chat-hist" id="wk-chat" style="min-height:100px;"></div>
+    <div class="cinput-row">
+      <textarea id="wk-q" placeholder="Ask about your workout..." rows="2"></textarea>
+      <button class="btn primary" onclick="askWorkout()">Ask</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-lbl">Nutrition Today</div>
+    <div class="ngrid">
+      <div><div class="nc-title eat">✓ Eat This</div><div id="eat-list"></div></div>
+      <div><div class="nc-title avoid">✗ Avoid</div><div id="avoid-list"></div></div>
+    </div>
+    <div class="wbar">
+      <div class="wbar-lbl">Water — 3 litres today. Tap each glass when you drink 500ml.</div>
+      <div class="glasses" id="glasses"></div>
+    </div>
+  </div>
+</div>
+
+<!-- QURAN -->
+<div class="page" id="page-quran">
+
+  <div class="card">
+    <div class="card-lbl">Quran Re-Memorisation Tracker</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:14px;">You already memorised the full Quran. Track each Juz — click to cycle through: Not Started → Strong → Weak → Very Weak → Strong. Get every Juz to Strong before going for the Ijazah.</div>
+
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);">
+        <div style="width:12px;height:12px;border-radius:3px;background:#3ecf8e;"></div> Strong
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);">
+        <div style="width:12px;height:12px;border-radius:3px;background:#e8c547;"></div> Weak
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);">
+        <div style="width:12px;height:12px;border-radius:3px;background:#f06565;"></div> Very Weak
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);">
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--bg4);border:1px solid var(--border);"></div> Not Started
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+      <div style="font-size:12px;color:var(--muted);">Strong: <strong style="color:#3ecf8e;" id="q-strong">0</strong></div>
+      <div style="font-size:12px;color:var(--muted);">Weak: <strong style="color:#e8c547;" id="q-weak">0</strong></div>
+      <div style="font-size:12px;color:var(--muted);">Very Weak: <strong style="color:#f06565;" id="q-vweak">0</strong></div>
+      <div style="font-size:12px;color:var(--muted);">Not Started: <strong style="color:var(--muted);" id="q-none">30</strong></div>
+    </div>
+
+    <div style="background:var(--bg4);border-radius:8px;height:6px;overflow:hidden;margin-bottom:18px;position:relative;">
+      <div id="q-bar-strong" style="position:absolute;left:0;top:0;height:100%;background:#3ecf8e;transition:width 0.4s;width:0%;"></div>
+      <div id="q-bar-weak"   style="position:absolute;top:0;height:100%;background:#e8c547;transition:width 0.4s;left:0%;width:0%;"></div>
+      <div id="q-bar-vweak"  style="position:absolute;top:0;height:100%;background:#f06565;transition:width 0.4s;left:0%;width:0%;"></div>
+    </div>
+
+    <div id="quran-grid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;"></div>
+  </div>
+
+  <div class="card" id="q-detail-card" style="display:none;">
+    <div class="card-lbl" id="q-detail-title">Juz Detail</div>
+    <div id="q-detail-body" style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:14px;"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn" onclick="setJuzState('strong')"  style="background:rgba(62,207,142,0.15);border-color:#3ecf8e;color:#3ecf8e;">✓ Strong</button>
+      <button class="btn" onclick="setJuzState('weak')"    style="background:rgba(232,197,71,0.15);border-color:#e8c547;color:#e8c547;">⚠ Weak</button>
+      <button class="btn" onclick="setJuzState('vweak')"   style="background:rgba(240,101,101,0.15);border-color:#f06565;color:#f06565;">✗ Very Weak</button>
+      <button class="btn" onclick="setJuzState('none')"    style="color:var(--muted);">Reset</button>
+      <button class="btn" onclick="document.getElementById('q-detail-card').style.display='none'" style="margin-left:auto;">Close</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-lbl">Ijazah Path</div>
+    <div style="font-size:13px;line-height:1.9;color:var(--muted);">
+      <strong style="color:var(--purple);">Now — 30 days:</strong> Get every Juz in this tracker to at least "Weak". Revise daily.<br>
+      <strong style="color:var(--purple);">Month 2-6:</strong> Move every Juz from Weak to Strong. Record yourself reciting.<br>
+      <strong style="color:var(--purple);">Month 6-12:</strong> Find a certified Sheikh. Use <a href="https://tarteel.ai" target="_blank" style="color:var(--accent);">Tarteel.ai</a> for AI Tajweed checking (free). Or contact Al-Azhar online.<br>
+      <strong style="color:var(--purple);">Final step:</strong> Recite the full Quran to the Sheikh for your Ijazah.<br><br>
+      Best tool: <a href="https://quran.com" target="_blank" style="color:var(--accent);">Quran.com</a> — loop single ayahs. Reciter: Sheikh Mishary Al-Afasy.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-lbl">Ask About Your Quran Journey</div>
+    <div class="chat-hist" id="quran-chat" style="min-height:80px;"></div>
+    <div class="cinput-row">
+      <textarea id="quran-q" placeholder="Ask about Tajweed, memorisation technique, Ijazah process..." rows="2"></textarea>
+      <button class="btn primary" onclick="askQuran()">Ask</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- LANGUAGES -->
+<div class="page" id="page-languages">
+  <div class="card">
+    <div class="card-lbl">Language Learning</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:14px;">You know English, Hindi, Gujarati fluently. You know Arabic basics. Now: Spanish (new) + Arabic (strengthen). Both are CV-worthy and university-useful.</div>
+    <div class="lang-tabs">
+      <div class="ltab active" onclick="switchLang('arabic',this)">🌙 Arabic</div>
+      <div class="ltab" onclick="switchLang('spanish',this)">🇪🇸 Spanish</div>
+    </div>
+    
+    <div class="lang-section active" id="lang-arabic">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:14px;">You have Arabic basics + Quranic exposure. Goal: conversational Modern Standard Arabic (MSA) + Gulf dialect (relevant for Dubai → Singapore). This directly boosts your CV for Middle East business.</div>
+      <div class="card-lbl">Today's Arabic Module — Day <span id="arabic-day-num">1</span></div>
+      <div id="arabic-plan"></div>
+      <div style="margin-top:14px;">
+        <div class="card-lbl">Free Arabic Resources — Click to Open</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <a href="https://www.duolingo.com/course/ar/en/Learn-Arabic" target="_blank" style="display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;text-decoration:none;transition:border-color 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:18px;">📱</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--text);">Duolingo Arabic</div><div style="font-size:11px;color:var(--muted);">10 mins daily — best free vocabulary app. Start here.</div></div>
+          </a>
+          <a href="https://www.youtube.com/@ArabicwithSam" target="_blank" style="display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;text-decoration:none;transition:border-color 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:18px;">📺</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--text);">YouTube: Arabic with Sam</div><div style="font-size:11px;color:var(--muted);">Gulf dialect, beginner-friendly. Perfect for Dubai → Singapore context.</div></div>
+          </a>
+          <a href="https://www.youtube.com/results?search_query=madinah+arabic+book+1+lesson" target="_blank" style="display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;text-decoration:none;transition:border-color 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:18px;">📖</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--text);">Madinah Arabic Book 1 (YouTube lessons)</div><div style="font-size:11px;color:var(--muted);">Used by Al-Azhar University. The gold standard. Free video lessons.</div></div>
+          </a>
+          <a href="https://www.youtube.com/results?search_query=arabic+grammar+for+beginners+MSA" target="_blank" style="display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;text-decoration:none;transition:border-color 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:18px;">🎓</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--text);">MSA Arabic Grammar (YouTube)</div><div style="font-size:11px;color:var(--muted);">Modern Standard Arabic — what business and media use.</div></div>
+          </a>
+          <a href="https://www.arabiconline.eu/arabic-pod-101/" target="_blank" style="display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;text-decoration:none;transition:border-color 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:18px;">🎧</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--text);">ArabicPod101</div><div style="font-size:11px;color:var(--muted);">Audio podcast lessons. Listen while eating or walking.</div></div>
+          </a>
+          <a href="https://www.tandem.net" target="_blank" style="display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;text-decoration:none;transition:border-color 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:18px;">🗣️</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--text);">Tandem — Language Exchange</div><div style="font-size:11px;color:var(--muted);">Find Arabic speakers who want to learn English. Free conversation practice.</div></div>
+          </a>
+        </div>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="card-lbl">Ask Your Arabic Tutor</div>
+        <div class="qbtns">
+          <button class="btn" onclick="qLang('arabic','Give me 10 essential Arabic phrases for business conversations.')">Business phrases</button>
+          <button class="btn" onclick="qLang('arabic','Explain the difference between MSA and Gulf dialect. Which should I focus on?')">MSA vs Gulf</button>
+          <button class="btn" onclick="qLang('arabic','Teach me today\\'s Arabic lesson — Day '+getCurrentDay()+'. Make it practical.')">Today's lesson</button>
+        </div>
+        <div class="chat-hist" id="arabic-chat" style="min-height:80px;"></div>
+        <div class="cinput-row">
+          <textarea id="arabic-q" placeholder="Ask anything in Arabic learning..." rows="2"></textarea>
+          <button class="btn primary" onclick="askArabic()">Ask</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="lang-section" id="lang-spanish">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:14px;">Spanish from scratch. It's the world's 2nd most spoken language, Latin America is a huge business market, and it's one of the fastest languages to learn if you already know English. Realistic goal: conversational A2-B1 in 6 months with 20 mins/day.</div>
+      <div class="card-lbl">Today's Spanish Module — Day <span id="spanish-day-num">1</span></div>
+      <div id="spanish-plan"></div>
+      <div style="margin-top:14px;">
+        <div class="card-lbl">Free Spanish Resources — Click to Open</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <a href="https://www.languagetransfer.org/free-courses-1#complete-spanish" target="_blank" style="display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;text-decoration:none;transition:border-color 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:18px;">🥇</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--text);">Language Transfer — Complete Spanish</div><div style="font-size:11px;color:var(--muted);">40 free audio episodes. Best free Spanish course that exists. Start here — Day 1.</div></div>
+          </a>
+          <a href="https://www.youtube.com/results?search_query=language+transfer+complete+spanish" target="_blank" style="display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;text-decoration:none;transition:border-color 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:18px;">📺</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--text);">Language Transfer on YouTube</div><div style="font-size:11px;color:var(--muted);">All 40 episodes free on YouTube. No login needed.</div></div>
+          </a>
+          <a href="https://www.duolingo.com/course/es/en/Learn-Spanish" target="_blank" style="display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;text-decoration:none;transition:border-color 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:18px;">📱</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--text);">Duolingo Spanish</div><div style="font-size:11px;color:var(--muted);">15 mins daily. Use alongside Language Transfer for reinforcement.</div></div>
+          </a>
+          <a href="https://www.youtube.com/@DreamingSpanish" target="_blank" style="display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;text-decoration:none;transition:border-color 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:18px;">🎬</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--text);">Dreaming Spanish (YouTube)</div><div style="font-size:11px;color:var(--muted);">Comprehensible input — watch Spanish content you can almost understand. Start Week 2.</div></div>
+          </a>
+          <a href="https://apps.ankiweb.net" target="_blank" style="display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;text-decoration:none;transition:border-color 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:18px;">🃏</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--text);">Anki Flashcards (free)</div><div style="font-size:11px;color:var(--muted);">Download "Spanish Top 5000 Words" deck. 20 new cards/day = fluent vocabulary in months.</div></div>
+          </a>
+          <a href="https://www.tandem.net" target="_blank" style="display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;text-decoration:none;transition:border-color 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:18px;">🗣️</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--text);">Tandem — Talk to Native Speakers</div><div style="font-size:11px;color:var(--muted);">Find Spanish speakers who want to learn English. Real conversation from Week 3.</div></div>
+          </a>
+          <a href="https://www.hellotalk.com" target="_blank" style="display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;text-decoration:none;transition:border-color 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:18px;">💬</span>
+            <div><div style="font-size:13px;font-weight:500;color:var(--text);">HelloTalk</div><div style="font-size:11px;color:var(--muted);">Alternative to Tandem. Text and voice with native speakers for free.</div></div>
+          </a>
+        </div>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="card-lbl">Ask Your Spanish Tutor</div>
+        <div class="qbtns">
+          <button class="btn" onclick="qLang('spanish','Give me the 20 most important Spanish words I need to know first.')">Core 20 words</button>
+          <button class="btn" onclick="qLang('spanish','Teach me how to introduce myself in Spanish right now.')">Introduce myself</button>
+          <button class="btn" onclick="qLang('spanish','Teach me today\\'s Spanish lesson — Day '+getCurrentDay()+'. Make it practical and fun.')">Today's lesson</button>
+        </div>
+        <div class="chat-hist" id="spanish-chat" style="min-height:80px;"></div>
+        <div class="cinput-row">
+          <textarea id="spanish-q" placeholder="Ask anything in Spanish learning..." rows="2"></textarea>
+          <button class="btn primary" onclick="askSpanish()">Ask</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COACH -->
+<div class="page" id="page-coach">
+  <div class="card">
+    <div class="card-lbl">Your Coach — No Filters</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:13px;">Knows everything. Harsh when needed. Invested in your success.</div>
+    <div class="qbtns">
+      <button class="btn" onclick="qCoach('Roast me. Tell me exactly what I\\'m probably avoiding and what that will cost me.')">Roast me</button>
+      <button class="btn" onclick="qCoach('Give me my exact plan for today. Time-blocked. No excuses.')">Today\\'s plan</button>
+      <button class="btn" onclick="qCoach('I\\'m scared of not fitting in at Tetr. Be honest with me.')">Tetr fears</button>
+      <button class="btn" onclick="qCoach('How do I make real friends as someone who talks well but doesn\\'t connect deeply?')">Social help</button>
+      <button class="btn" onclick="qCoach('I want to earn money before university. Most realistic path for me?')">Make money</button>
+      <button class="btn" onclick="qCoach('I skipped most of today. Don\\'t let me off the hook.')">I failed today</button>
+      <button class="btn" onclick="qCoach('I\\'m struggling to stay motivated. Give me a reality check about where I\\'ll be in 2 years if I keep slacking.')">Motivate me</button>
+    </div>
+    <div class="chat-hist" id="coach-chat"></div>
+    <div class="cinput-row">
+      <textarea id="coach-input" placeholder="What's on your mind?" rows="2"></textarea>
+      <button class="btn primary" onclick="askCoach()">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- LEARN -->
+<div class="page" id="page-learn">
+  <div class="card">
+    <div class="card-lbl">Today's Lesson</div>
+    <div class="card-h" id="learn-title">—</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:13px;" id="learn-desc"></div>
+    <button class="btn primary" onclick="loadLesson()" id="learn-btn">Generate Today's Lesson</button>
+  </div>
+  <div class="card" id="learn-result-card" style="display:none;">
+    <div class="card-lbl">Your Lesson</div>
+    <div id="learn-result" style="font-size:13.5px;line-height:1.7;white-space:pre-wrap;"></div>
+  </div>
+  <div class="card">
+    <div class="card-lbl">Ask & Learn</div>
+    <div class="chips" id="learn-chips">
+      <div class="chip" onclick="qLearn('Explain startup valuation to me like I\\'m 18 with no finance background.')">Startup valuation</div>
+      <div class="chip" onclick="qLearn('What is unit economics and why does every investor ask about it?')">Unit economics</div>
+      <div class="chip" onclick="qLearn('How do I build a personal brand before Tetr that makes people want to know me?')">Personal brand</div>
+      <div class="chip" onclick="qLearn('Compound interest explained — and why I should think about investing at 18.')">Investing at 18</div>
+      <div class="chip" onclick="qLearn('What should I know about Tetr College of Business before I arrive?')">Tetr prep</div>
+      <div class="chip" onclick="qLearn('What are the best 5 books for a young entrepreneur? 1-paragraph summary of each.')">Books to read</div>
+    </div>
+    <div class="chat-hist" id="learn-chat" style="min-height:100px;"></div>
+    <div class="cinput-row">
+      <textarea id="learn-input" placeholder="Ask anything — business, economics, social skills..." rows="2"></textarea>
+      <button class="btn primary" onclick="askLearn()">Ask</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="page" id="page-progress">
+  <div class="pcols3">
+    <div class="card pstat" style="margin:0;"><div class="pstat-val" id="p-streak" style="color:var(--accent)">0</div><div class="pstat-lbl">Streak</div></div>
+    <div class="card pstat" style="margin:0;"><div class="pstat-val" id="p-xp" style="color:var(--green)">0</div><div class="pstat-lbl">Total XP</div></div>
+    <div class="card pstat" style="margin:0;"><div class="pstat-val" id="p-tasks" style="color:var(--blue)">0</div><div class="pstat-lbl">Tasks done</div></div>
+  </div>
+  <div class="card"><div class="card-lbl">30-Day Map</div><div class="sgrid" id="sgrid"></div></div>
+  <div class="card"><div class="card-lbl">This Week</div><div class="wchart" id="wchart"></div></div>
+  <div class="card"><div class="card-lbl">Achievements</div><div class="achlist" id="achlist"></div></div>
+</div>
+
+<!-- SETTINGS -->
+<div class="page" id="page-settings">
+  <div class="card">
+    <div class="set-section">
+      <h3>Gemini API Key</h3>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:9px;">Powers everything — news, coach, workouts, lessons, languages. Free. Get yours at <a href="https://aistudio.google.com/app/apikey" style="color:var(--accent);" target="_blank">aistudio.google.com</a></div>
+      <div class="set-row"><input type="password" id="key-input" placeholder="AIza..."/><button class="btn primary" onclick="saveKey()">Save</button></div>
+      <span class="saved" id="key-saved">Key saved ✓</span>
+      <div id="key-status" style="font-size:12px;color:var(--muted);margin-top:5px;"></div>
+    </div>
+    <div class="set-section">
+      <h3>Gemini API Key 2 — Fallback (Voice Coach)</h3>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:9px;">Optional second key for the Spanish &amp; Accent coach. If key 1 hits a rate limit, the voice coach silently switches to this key. Stored in memory only — not saved on refresh.</div>
+      <div class="set-row"><input type="password" id="key2-input" placeholder="AIza... (optional)"/><button class="btn primary" onclick="saveKey2()">Set</button></div>
+      <span class="saved" id="key2-saved">Key 2 active ✓</span>
+    </div>
+    <div class="set-section">
+      <h3>Start Date</h3>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:9px;">Set your Day 1. Everything calculates from this.</div>
+      <div class="set-row"><input type="date" id="start-input" style="max-width:200px;"/><button class="btn primary" onclick="saveStart()">Set</button></div>
+      <span class="saved" id="start-saved">Date saved ✓</span>
+    </div>
+    <div class="set-section">
+      <h3>Desktop App Instructions</h3>
+      <div style="font-size:13px;line-height:1.8;color:var(--muted);">
+        To run this as a proper desktop app (its own window, taskbar icon, no browser tabs):<br><br>
+        <strong style="color:var(--accent);">Electron App (VS Code — recommended):</strong><br><br>
+        1. Install <strong style="color:var(--text);">Node.js</strong> from nodejs.org (free, one-time)<br>
+        2. Put all downloaded files in ONE folder on your desktop<br>
+        3. Open that folder in <strong style="color:var(--text);">VS Code</strong><br>
+        4. Open the VS Code terminal (Ctrl + `)<br>
+        5. Run: <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;">npm install</code><br>
+        6. Then run: <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;">npm start</code><br>
+        7. Your app opens in its own window — no browser, no tabs.<br><br>
+        To launch it again later: open VS Code → terminal → <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;">npm start</code><br><br>
+        <strong style="color:var(--accent);">To run Jarvis Focus Guardian:</strong><br>
+        In VS Code terminal: <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;">pip install SpeechRecognition pyaudio pyautogui google-generativeai win10toast pygetwindow</code><br>
+        Then: <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;">python jarvis_guardian.py</code>
+      </div>
+    </div>
+    <div class="set-section">
+      <h3>Reset Progress</h3>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:9px;">Clears tasks + XP. API key and start date stay.</div>
+      <button class="btn" onclick="resetAll()" style="color:var(--red);border-color:rgba(240,101,101,0.3);">Reset All Progress</button>
+    </div>
+  </div>
+</div>
+
+<!-- SPANISH COACH -->
+<div class="page" id="page-spanish-coach">
+  <div class="vc-wrap">
+    <div class="vc-hdr">
+      <div>
+        <div class="vc-title">🇪🇸 Spanish Coach</div>
+        <div class="vc-sub" id="sc-level-lbl">Beginner · Hold button to speak</div>
+      </div>
+      <button class="vc-newbtn" onclick="scNewSession()">New Session</button>
+    </div>
+    <div class="vc-stats">
+      <div class="vc-stat"><strong id="sc-exchanges">0</strong><span>Exchanges</span></div>
+      <div class="vc-stat"><strong id="sc-words">0</strong><span>Words</span></div>
+      <div class="vc-stat"><strong id="sc-session">1</strong><span>Session</span></div>
+    </div>
+    <div class="vc-body" id="sc-body"></div>
+    <div class="vc-transcript" id="sc-transcript"></div>
+    <div class="vc-controls">
+      <button class="vc-btn" id="sc-btn"
+        onmousedown="scStartListen(event)" onmouseup="scStopListen(event)"
+        ontouchstart="scStartListen(event)" ontouchend="scStopListen(event)">🎤</button>
+      <div class="vc-hint" id="sc-hint">Hold to speak · Release to send</div>
+      <div class="vc-micperm" id="sc-micperm" style="display:none;margin-top:10px;text-align:center;max-width:340px;">
+        <button class="btn" onclick="requestMic('sc')">🎤 Enable Microphone</button>
+        <div class="vc-hint" id="sc-micstatus" style="margin-top:7px;line-height:1.5;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ACCENT COACH -->
+<div class="page" id="page-accent-coach">
+  <div class="vc-wrap">
+    <div class="vc-hdr">
+      <div>
+        <div class="vc-title">🎯 Accent Coach</div>
+        <div class="vc-sub">Focus: <span id="ac-focus-name">th sounds</span></div>
+      </div>
+      <button class="vc-newbtn" onclick="acNewSession()">New Session</button>
+    </div>
+    <div class="vc-stats">
+      <div class="vc-stat"><strong id="ac-score-disp">—</strong><span>Score</span></div>
+      <div class="vc-stat"><strong id="ac-exchanges">0</strong><span>Turns</span></div>
+      <div class="vc-stat"><strong id="ac-best">—</strong><span>Best</span></div>
+    </div>
+    <div class="vc-body" id="ac-body"></div>
+    <div class="vc-feedback" id="ac-feedback" style="display:none;">
+      <div class="vc-score-row">
+        <div class="vc-score-num" id="ac-score-num">—</div>
+        <div style="flex:1;">
+          <div class="vc-score-track"><div class="vc-score-fill" id="ac-score-fill" style="width:0%"></div></div>
+          <div class="vc-issue" id="ac-issue" style="margin-top:4px;"></div>
+        </div>
+      </div>
+      <div class="vc-repeat" id="ac-repeat" style="display:none;"></div>
+      <div class="vc-tip" id="ac-tip"></div>
+    </div>
+    <div class="vc-transcript" id="ac-transcript"></div>
+    <div class="vc-controls">
+      <button class="vc-btn" id="ac-btn"
+        onmousedown="acStartListen(event)" onmouseup="acStopListen(event)"
+        ontouchstart="acStartListen(event)" ontouchend="acStopListen(event)">🎤</button>
+      <div class="vc-hint" id="ac-hint">Hold to speak · Release to send</div>
+      <div class="vc-micperm" id="ac-micperm" style="display:none;margin-top:10px;text-align:center;max-width:340px;">
+        <button class="btn" onclick="requestMic('ac')">🎤 Enable Microphone</button>
+        <div class="vc-hint" id="ac-micstatus" style="margin-top:7px;line-height:1.5;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+</div><!-- end app -->
+
+<!-- SCHEDULE OVERLAY WIDGET -->
+<div id="ov-wrap" style="position:fixed;bottom:20px;right:20px;z-index:99999;touch-action:none;user-select:none;">
+  <div id="ov-box" style="width:210px;background:rgba(12,12,12,0.96);border:1px solid rgba(232,197,71,0.45);border-radius:12px;padding:11px 13px;box-shadow:0 4px 28px rgba(0,0,0,0.65);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
+      <span style="font-size:9px;color:#e8c547;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;">RIGHT NOW</span>
+      <button id="ov-toggle" style="background:none;border:none;color:#666;cursor:pointer;font-size:16px;line-height:1;padding:0 2px;" title="Minimise">−</button>
+    </div>
+    <div id="ov-time" style="font-family:'DM Mono',monospace;font-size:10px;color:#555;margin-bottom:3px;"></div>
+    <div id="ov-title" style="font-size:12.5px;font-weight:500;color:#f0ede8;line-height:1.4;margin-bottom:6px;"></div>
+    <div id="ov-next" style="font-size:10px;color:#555;border-top:1px solid rgba(255,255,255,0.06);padding-top:5px;line-height:1.4;"></div>
+  </div>
+  <div id="ov-dot" style="display:none;width:40px;height:40px;background:rgba(232,197,71,0.9);border-radius:50%;align-items:center;justify-content:center;font-size:18px;cursor:pointer;box-shadow:0 2px 14px rgba(0,0,0,0.5);" title="Show schedule widget">📅</div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// PASTE YOUR GEMINI API KEY BETWEEN THE QUOTES BELOW:
+const GEMINI_KEY = "";
+// ══════════════════════════════════════════════════════
+
+
+// ── SCHEDULE DATA ─────────────────────────────────────────────────────
+const SCHEDULE=[
+  {time:"10:00",title:"Wake up — no phone for 10 mins",tags:["mindset"],desc:"Alarm goes off. Feet hit the floor immediately — no snooze, no negotiation. Walk to the bathroom. Splash cold water on your face 10 times. Look yourself in the mirror and say out loud: 'I am Shabbir. I am going to Tetr. I will be the most prepared person in that room.' Say it out loud — every single day. Then put your phone face-down across the room and do not touch it for 10 full minutes. This one habit separates people who actually transform from people who just intend to."},
+  {time:"10:10",title:"Morning movement — 10 mins",tags:["fitness"],desc:"Do this sequence right now, in your bedroom, no equipment:\n\n① 15 jumping jacks — get your blood moving.\n② 10 push-ups — chest to floor, full range. If you cannot do 10, do as many as you can then finish with knee push-ups.\n③ 10 bodyweight squats — feet shoulder-width, chest tall, go below parallel.\n④ 10 more jumping jacks.\n⑤ 10 more push-ups.\n⑥ 30-second plank — forearms on floor, body straight as a board, squeeze your core and glutes.\n\nThis is not your real workout — it is a biological ignition. Your brain produces BDNF (brain growth protein) with movement. Your focus for the next 4 hours depends on these 10 minutes. Zero excuses."},
+  {time:"10:25",title:"500ml water — right now",tags:["diet"],desc:"Your body just ran 7-8 hours without water. Your brain is 73% water and it is currently dehydrated. Drink 500ml — one full glass or half a bottle — before tea, before breakfast, before anything. Fill it right now and drink all of it. Mental clarity improves within 20 minutes of hydrating after sleep."},
+  {time:"10:30",title:"Breakfast — real food only",tags:["diet"],desc:"Cook and eat one of these — no substitutes:\n\n✓ Option A: 3 scrambled or boiled eggs + 1 banana + glass of milk\n✓ Option B: Oats with milk (no added sugar) + 1 boiled egg on the side\n✓ Option C: 2 eggs any style + whole wheat toast + a piece of fruit\n\nNo biscuits. No sugary tea. No cereal. No skipping. You skip breakfast constantly and by 1pm you are foggy, irritable, and making worse decisions. Protein now = 4 hours of mental clarity. Sit down. Eat."},
+  {time:"11:00",title:"Learning block — 30 mins",tags:["business"],desc:"One subject. One tab. Timer on. Phone in another room.\n\n📅 Monday / Wednesday / Friday: Read 'The Lean Startup' by Eric Ries (free PDF — Google it). One chapter. After reading, write 3 things that apply to makemerevise.com or @TheRashidaDiaries.\n📅 Tuesday / Thursday: Harvard CS50 on YouTube (free — cs50.harvard.edu). One lecture section. You do not need to code — understand how systems think.\n📅 Saturday: One startup story on YouTube — search 'How [company] got their first 1000 users'. Take notes.\n📅 Sunday: Khan Academy Economics — one concept. This is what Tetr professors will assume you know.\n\n30 minutes. No switching tabs. Go."},
+  {time:"11:35",title:"News brief — 20 mins",tags:["business"],desc:"Open the News tab in this app right now. Click 'Load Today's News'. Read every article fully — do not skim.\n\nWhy this matters to you specifically: at Tetr, students casually reference Bloomberg, the FT, and The Economist in conversation. You will be in rooms with people who know what is happening in the world. Right now you do not. 20 minutes of real news every day changes that within 30 days.\n\nAfter reading: close the screen, look up, and explain one story to yourself out loud in 2 sentences from memory. That is how you retain it."},
+  {time:"11:55",title:"Full workout — 50 mins",tags:["fitness"],desc:"Open the Workout tab — today's routine is displayed there (Push / Pull / Legs / Recovery rotates daily). Here is EXACTLY what to do for each:\n\n🔴 PUSH DAY — Chest, Shoulders, Triceps:\n• Dumbbell Floor Press 4×10: Lie flat on floor. Dumbbells at chest width. Press up explosively. Lower in exactly 3 full seconds. Feel the chest stretch at the bottom. 60s rest between sets.\n• Dumbbell Shoulder Press 3×12: Seated. Dumbbells at shoulder height. Press straight overhead until arms are fully extended. Lower in 3 seconds — do not drop fast. 60s rest.\n• Lateral Raises 3×15: Stand, arms slightly bent. Raise to shoulder height in 1 second. Lower in 3 seconds. Do NOT swing. 45s rest.\n• Tricep Overhead Extension 3×12: Both hands gripping one dumbbell behind your head. Elbows close to ears — they do not flare. Extend fully up, lower until you feel the stretch. 60s rest.\n• Push-ups to failure — 3 sets: Go until you genuinely cannot. Record your max number this week and beat it next week.\n\n🔵 PULL DAY — Back, Biceps:\n• Pull-ups or Negatives 4 sets max: Full pull-up = dead hang, pull until chin clears bar, lower controlled. Cannot do full ones? Jump to top (chin over bar) and lower yourself in 5 full seconds — that is a negative. 5 negatives per set. 90s rest.\n• Bent-Over Dumbbell Row 4×12 each arm: Hinge at 45 degrees, one hand on knee for support. Pull dumbbell to hip. Squeeze shoulder blade at the top for 1 second. 60s rest.\n• Dumbbell Bicep Curls 3×12: Start from full extension. Curl up in 1s, lower in 3s. No swinging — if you are swinging, the weight is too heavy. 60s rest.\n• Dead Hangs 3×30 seconds: Just hang from bar, full grip. Builds grip strength and decompresses your spine. 45s rest.\n\n🟢 LEGS + CORE DAY:\n• Goblet Squat 4×15: Hold one dumbbell at your chest. Feet shoulder-width. Go below parallel — thighs below knees. Chest tall throughout. Drive through your heels to stand. 60s rest.\n• Dumbbell Lunges 3×12 each leg: Step forward, lower back knee to just above the floor. Front shin stays vertical. Drive through your front heel to return. 60s rest.\n• Romanian Deadlift 3×12: Dumbbells in front of thighs. Hinge at hips — push hips back, lower weights along your legs. Feel the hamstring stretch. Stop when your back starts to round. 60s rest.\n• Plank 3×45 seconds: Forearms flat. Body is a straight line from head to heels. Squeeze glutes. Breathe steadily. If lower back aches, raise hips slightly.\n• Crunches 3×25: Lie flat, knees bent, hands lightly behind ears. Crunch until shoulder blades leave floor. 1-second hold at top. Controlled down. Do NOT yank your neck.\n\n🟡 RECOVERY DAY:\n• Punching bag 6×2 mins with 1 min rest.\n• Light dumbbell circuit: 10 curls + 10 shoulder press + 10 rows + 30s plank. 2 rounds, no rest.\n• 10-min full body stretch (YouTube: 'beginner full body stretch 10 minutes').\n\nNo break longer than 90 seconds. Set a timer for the full 50 minutes. Phone is only for the timer."},
+  {time:"12:50",title:"Shower + dress with intention",tags:["mindset"],desc:"Shower now. End with cold water for at least 30 seconds — this closes your pores and triggers an alertness response. Then dress in real clothes. Not loungewear. Not pyjamas. Actual clothes you would leave the house in.\n\nYou are Shabbir — co-founder, content creator, Tetr-bound. Dress that version of you, not the version that is comfortable being average. Research shows how you dress directly changes your cognitive performance and your confidence. This takes 20 minutes. Do it."},
+  {time:"13:10",title:"Deep work — 2 hours",tags:["business"],desc:"The most important 2 hours of your day. ONE task. No switching. Phone in another room. No music with lyrics. Timer set for exactly 2 hours.\n\nChoose ONE based on what is most urgent this week:\n\n📝 Option A — Content for @TheRashidaDiaries: Write 3 complete, ready-to-post pieces. Not drafts — finished. Research hook, write body, write caption. Three pieces in 2 hours is achievable.\n\n💻 Option B — makemerevise.com: One specific feature or fix. Open the file, write, build. Do not plan during this block — execute only.\n\n📧 Option C — Cold outreach: DM 10 potential brand partners on Instagram or LinkedIn. Each DM must be personalised — reference their last post or specific product. Copy-paste DMs get ignored. Personalised ones get replies.\n\nThe rule: if you open Instagram, switch tabs, or 'just check' anything — the 2-hour timer resets. This is the discipline that separates Tetr students who build real things from those who just talk about it."},
+  {time:"15:15",title:"500ml water",tags:["diet"],desc:"You are at 1 litre total. Tap the glass in the Workout tab to track it. This water break also marks the end of your deep work block — stand up, stretch your back, walk to the kitchen, drink the full glass. 1.5 litres still to go for the day."},
+  {time:"15:25",title:"Lunch — no processed food",tags:["diet"],desc:"Cook and eat one of these:\n\n✓ Dal + brown rice + any vegetable sabzi\n✓ Roti + scrambled eggs + cucumber and tomato\n✓ Grilled or boiled chicken + rice + salad\n✓ Paneer bhurji + 2 roti + vegetables\n\nNo fried food. No soda. No white bread. No 'I will eat later' — you won't, and your afternoon will fall apart.\n\nSit down. No screen while eating. 30 minutes where your body digests and your brain decompresses. You skip meals constantly. It is making your focus weaker and your body weaker. That stops today."},
+  {time:"15:55",title:"Social reach-out — 1 person",tags:["social"],desc:"Open LinkedIn, Instagram DMs, or WhatsApp. Message ONE person — just one. It can be:\n\n• An old classmate you've lost touch with\n• A founder or creator you genuinely follow and respect\n• Someone from a startup Discord or Reddit community\n• A Tetr student — search 'Tetr College of Business' on LinkedIn and connect with a current student\n\nExact message: 'Hey [name], saw your [post / project / profile] — genuinely interesting. Wanted to connect.' That is all. Do not overthink it.\n\nBy the time you arrive at Tetr you should have 30 warm connections you have actually spoken to. That is 30 messages — one a day for 30 days. Today is day [current day]. Send it now."},
+  {time:"16:20",title:"Quran revision — 25 mins",tags:["quran"],desc:"See the Quran tab for today's Juz assignment. Exact method — do not skip steps:\n\n① Open Quran.com on your phone\n② Go to today's assigned ayahs (Quran tab tells you which ones)\n③ Listen to Sheikh Mishary Al-Afasy's recitation — 3 full times, eyes on the Arabic text the entire time\n④ Read along with him twice — your lips must move, following every word\n⑤ Close the screen. Recite from memory. Check yourself against the text.\n⑥ Any ayah you stumbled on: repeat it alone 10 more times minimum before moving on\n\nOnce per week: record yourself reciting one full page on your phone voice memo. Listen back. This catches Tajweed errors you cannot hear in real time.\n\nYou memorised the full Quran. It is already in your memory. You are not re-learning — you are unlocking what already exists. Trust this."},
+  {time:"16:50",title:"Rest walk — 15 mins, no phone",tags:["mindset"],desc:"Walk outside, around your building, or on your balcony. Phone stays inside. Hands empty. Eyes forward.\n\nYour brain has been in input mode since 10am. It needs 15 minutes to process and consolidate. Scientists call this 'diffuse mode thinking' — it is when your brain makes connections between things you have already learned. The ideas that come to you on this walk are real insights. Some of your best ones will arrive here.\n\nNo podcast. No music. No phone. Just 15 minutes of you and your own thoughts. This is not optional."},
+  {time:"17:10",title:"Arabic — 20 mins",tags:["language"],desc:"Open the Languages tab for today's module. Exact daily routine:\n\nMinutes 1-10: Duolingo Arabic — one full lesson. Do not rush through for the streak. Actually say the words out loud. Pronunciation matters from day one.\n\nMinutes 11-20: Physical notebook. Write 5 new Arabic words from today's lesson — write each word 3 times. Then write one Arabic sentence using any word you know. It does not have to be perfect. It has to be real.\n\nWeek 1 core words: أنا (ana - I), أنتَ (anta - you), هذا (hatha - this), ماذا (matha - what), كيف (kayfa - how), شكراً (shukran - thank you), نعم (na'am - yes), لا (la - no), من فضلك (min fadlak - please), أين (ayna - where)."},
+  {time:"17:35",title:"Spanish — 20 mins",tags:["language"],desc:"Open the Languages tab for today's module. Exact routine:\n\nMinutes 1-13: Language Transfer Complete Spanish — one episode. It is free on YouTube (search 'Language Transfer Complete Spanish'). Start from Episode 1. Progress in order. When the teacher asks you to form a sentence — pause the audio and actually say it out loud before he gives the answer. Passive listening is worthless.\n\nMinutes 14-20: Duolingo Spanish — 5 minutes of reinforcement only.\n\nWeek 1 essentials: yo (I), tú (you), quiero (I want), necesito (I need), tengo (I have), puedo (I can), ¿cómo te llamas? (what is your name?), me llamo Shabbir (my name is Shabbir), soy de Dubai (I am from Dubai), ¿hablas inglés? (do you speak English?).\n\nSpeak out loud — always. Spanish reads exactly as it sounds. This is the easiest language you will ever learn."},
+  {time:"17:55",title:"Learning block 2 — 90 mins",tags:["business"],desc:"Second deep learning block. Different subject from this morning.\n\n📅 Monday: Watch one TED Talk on entrepreneurship (YouTube: 'best TED talks entrepreneurship 2024'). Watch fully. Write 3 specific takeaways that apply to your life — not general notes.\n📅 Tuesday: Read one TechCrunch or YCombinator article about a startup. Understand exactly how they make money.\n📅 Wednesday: Coursera Business Foundations — Wharton School (audit for free, zero payment). One video. Take notes. This is literally Wharton MBA content at no cost.\n📅 Thursday: HubSpot Academy — pick one free certification course. Marketing, Sales, or Business. 90 minutes gets you a real credential.\n📅 Friday: Apply this week's learning to @TheRashidaDiaries or makemerevise.com. Write one page of specific improvements.\n📅 Saturday: Research one Tetr student or alumni on LinkedIn. What are they building? What can you learn from their path?\n📅 Sunday: Review your notes from the entire week. What is one idea that changed how you think?"},
+  {time:"19:30",title:"Punching bag — 20 mins",tags:["fitness"],desc:"This is where everything goes — the frustration, the self-doubt, the fear of not being ready. Hit it.\n\nExact routine — set your phone timer:\n\nRound 1 — 3 minutes, Jab-Cross only:\nLeft jab = quick snap, arm extends fully, return immediately. Right cross = rotate hips, full power from your core. Breathe OUT hard on every single strike. Move your feet between combinations — side to side, small steps — never stand flat-footed. 1 minute rest.\n\nRound 2 — 3 minutes, Jab-Cross-Hook:\nAdd left hook after each cross. Rotate your torso on the hook — your power comes from hip rotation, not just your arm. Feel the difference. 1 minute rest.\n\nRound 3 — 3 minutes, everything:\nJab-Cross-Hook-Uppercut. Uppercut = bend knees, drive up from your legs, short sharp punch angled upward. Mix all combinations. Move constantly. This is where you go hardest. Hit it like it owes you something. 1 minute rest.\n\nCooldown — 2 minutes: Light jabs only. Slow. Let your heart rate drop naturally. Shake your arms out."},
+  {time:"19:55",title:"Pull-ups + core — 20 mins",tags:["fitness"],desc:"Pull-up bar — 3 working sets:\n\nGrip the bar slightly wider than shoulder-width. Start from a dead hang — arms fully extended. Pull until your chin is clearly above the bar. Lower yourself controlled — do not drop. That is one rep.\n\nIf you can only do 1-3 full pull-ups: finish each set with negatives. Jump or step to the top position (chin over bar), then lower yourself as slowly as you can — aim for 5 full seconds going down. 3-5 negatives per set. Every rep builds toward the full movement.\n\nRest 90 seconds between pull-up sets.\n\nCore circuit — 2 rounds, no rest between exercises (30s rest between rounds):\n① Crunches × 25: Hands lightly behind ears. Shoulders come off the floor. 1-second hold at top. Controlled down. Eyes on ceiling — do not pull your neck.\n② Plank × 45 seconds: Forearms flat. Body a straight line. Squeeze glutes and core. Breathe steadily.\n③ Leg raises × 15: Lie flat, legs straight. Raise feet to 90 degrees. Lower slowly without feet touching the floor. This hits your lower abs — the hardest part to develop.\n④ Bicycle crunches × 20: Alternating elbow to opposite knee. Controlled rotation. Do not rush.\n\nYour visible abs are built here. You will not see them for 3 weeks. Build them every day anyway."},
+  {time:"20:20",title:"Income work — 60 mins",tags:["business"],desc:"One focused hour that changes your financial situation before university. Phone notifications off. Timer on.\n\n📅 Week 1 — Brand outreach for @TheRashidaDiaries:\nDM 5 brands today. Instagram DMs or LinkedIn messages — not email, DMs are faster. Each message must be personalised: 'Hi [brand], I run @TheRashidaDiaries — we cover [relevant topic] and your [specific product] fits our audience perfectly. Would love to discuss a collaboration.' Change the last sentence for each brand. Generic = ignored. Personal = replied to.\n\n📅 Week 2 — Digital product research:\nWhat do you know that someone would pay to learn? Starting a content platform from zero? Preparing for Tetr? Learning Arabic fast? Write 3 product ideas. Research if similar products exist and at what price point on Gumroad.com.\n\n📅 Week 3 — Build your offer:\nTake your strongest idea from Week 2. Write a one-page document: what you are selling, exactly who it helps, and what they get. Keep it simple. This is your product brief.\n\n📅 Week 4 — Launch:\nPost about it publicly. DM 10 people who might want it. List it on Gumroad (free) or Payhip (free). Tell people. Your first pound or dollar earned online changes your entire mental model of what is possible."},
+  {time:"21:25",title:"Reading — 20 mins",tags:["mindset"],desc:"Physical book or PDF. Not an audiobook — reading builds different concentration than listening.\n\nWeek 1-2: Atomic Habits by James Clear (free PDF — Google it). One concept per session. After reading, write one sentence: what single habit will you change based on this chapter?\n\nWeek 3-4: How to Win Friends and Influence People by Dale Carnegie (free PDF). Every principle is something you can test the next day with real people.\n\nRule: only underline things that are specifically relevant to you right now — to Shabbir, 18 years old, running a platform, going to Tetr. If you cannot connect what you are reading to your actual life, keep reading until you find something you can apply tomorrow."},
+  {time:"21:50",title:"Dinner + final 500ml water",tags:["diet"],desc:"Cook one of these:\n\n✓ Grilled or boiled chicken, eggs, or paneer + any vegetable + small portion of rice or roti\n✓ Dal + roti + cucumber and tomato salad\n✓ 3-egg omelette + whole wheat toast + a piece of fruit\n\nNo sugary dessert. If you want something sweet: 2 dates, a banana, or one square of dark chocolate.\n\nDrink your final 500ml of water with dinner. That completes your 3 litres for the day.\n\nSit down. No screen while eating. 15 minutes for your body to digest and your mind to decompress before wind-down."},
+  {time:"22:10",title:"App check-in + reflection",tags:["mindset"],desc:"Open this app. Check off every task you actually completed today — be completely honest. Do not tick something you did not finish.\n\nWrite one sentence in the reflection box. Make it honest:\n• 'Skipped lunch but did the full workout and both deep work blocks.'\n• 'Opened Instagram during deep work block — lost 25 minutes. Will put phone in another room tomorrow.'\n• 'Sent 5 brand DMs for the first time. It felt uncomfortable. I did it anyway.'\n\nHonest reflection in 2 minutes is worth more than an hour of planning. Look at today's completion rate: is this the version of you that is ready to walk into Tetr?"},
+  {time:"22:25",title:"Wind down — screens off by 22:30",tags:["mindset"],desc:"Dim your room lights. Phone goes to another room — not on your nightstand.\n\nFor the next 20 minutes:\n✓ Do: Read your physical book. Lie quietly. Light stretching. Think through tomorrow.\n✗ Do not: Check Instagram. Watch YouTube. Scroll anything. Text anyone non-urgently.\n\nBlue light from screens suppresses your sleep hormone (melatonin) for up to 90 minutes. Protecting this wind-down protects your 10 AM wake-up — because poor sleep is the number one reason people skip their morning routine.\n\nBefore putting the phone down: set your 10:00 AM alarm for tomorrow."},
+  {time:"22:45",title:"Sleep",tags:["mindset"],desc:"Lights out. 10:00 AM wake-up needs 10:45 PM sleep to get 7+ hours.\n\nIf your mind is racing: box breathing. In for 4 counts → hold for 4 → out for 4 → hold for 4. Repeat 10 times. Your nervous system cannot stay activated during this pattern — it is physiologically impossible.\n\nSleep is when your muscles grow from today's workout. It is when your brain consolidates everything you learned. It is when your memory processes and stores today's Quran revision. Protecting sleep is protecting every other block in this schedule. 7.5 hours minimum. Non-negotiable."},
+];
+
+const WORKOUTS=[
+  {name:"Push Day — Chest, Shoulders, Triceps",desc:"Build the width. This is your presence before you even speak.",exs:[
+    {name:"Dumbbell Floor Press",sets:"4 × 10 reps",note:"Lie on floor. Dumbbells at chest. Press up, pause 1 sec. 60s rest between sets."},
+    {name:"Dumbbell Shoulder Press",sets:"3 × 12 reps",note:"Seated. Press overhead. Lower slow — 3 full seconds down. Don't arch."},
+    {name:"Lateral Raises",sets:"3 × 15 reps",note:"Arms out slow. Up in 1s, down in 3s. Builds the shoulder cap."},
+    {name:"Tricep Overhead Extension",sets:"3 × 12 reps",note:"Both hands on one dumbbell. Elbows stay close to head. Full stretch."},
+    {name:"Push-ups to failure",sets:"3 sets",note:"Go until you genuinely cannot. Track your max each week."},
+  ]},
+  {name:"Pull Day — Back & Biceps",desc:"The V-shape and arm definition. Pull-up bar is king.",exs:[
+    {name:"Pull-ups (or negatives)",sets:"4 × max reps",note:"Can't do full ones? Jump to top, lower in 5 seconds. Every rep counts."},
+    {name:"Bent-Over Dumbbell Row",sets:"4 × 12 each arm",note:"Hinge 45°. Pull to hip. Squeeze shoulder blade at top."},
+    {name:"Dumbbell Bicep Curls",sets:"3 × 12 reps",note:"Slow down (3 seconds). No swinging. Full range."},
+    {name:"Dead Hangs",sets:"3 × 30 seconds",note:"Hang from bar. Builds grip + decompresses spine. 45s rest."},
+  ]},
+  {name:"Legs & Core — The Foundation",desc:"50% of your muscle mass. Skip this and you're building half a body.",exs:[
+    {name:"Goblet Squat",sets:"4 × 15 reps",note:"Hold dumbbell at chest. Deep. Knees track toes. Chest tall."},
+    {name:"Dumbbell Lunges",sets:"3 × 12 each leg",note:"Step forward, back knee just above floor. Torso upright."},
+    {name:"Romanian Deadlift",sets:"3 × 12 reps",note:"Hinge at hips, feel hamstring stretch. Don't round back."},
+    {name:"Plank",sets:"3 × 45 seconds",note:"Flat back. Squeeze everything. Progress to 60s by week 3."},
+    {name:"Crunches",sets:"3 × 25 reps",note:"Controlled. Don't yank your neck. Look at ceiling."},
+  ]},
+  {name:"Active Recovery + Bag Work",desc:"Rest day. But rest means active, not dead.",exs:[
+    {name:"Punching Bag Rounds",sets:"6 × 2 mins, 1 min rest",note:"Jab-cross-hook. Breathe OUT on each strike. Move your feet."},
+    {name:"Light Dumbbell Circuit",sets:"2 rounds, no rest",note:"10 curls → 10 shoulder press → 10 rows → 30s plank."},
+    {name:"Full Body Stretch",sets:"10 mins",note:"YouTube: 'beginner full body stretch 10 minutes'. Non-optional."},
+  ]},
+];
+
+const EAT=[
+  ["Scrambled/boiled eggs + banana","Brown rice + grilled chicken","Oats with milk (no added sugar)","Cucumber + tomato salad (side)","Dal + roti for dinner"],
+  ["Boiled eggs + whole wheat toast","Stir-fried veg + rice","Paneer bhurji + 2 roti","Apple or pear (any whole fruit)","Lentil soup + bread"],
+];
+const AVOID=["Sugary tea, coffee, energy drinks","Biscuits, chips, crisps","White bread or maida","Deep fried anything","Soft drinks, juice, milkshakes"];
+
+const MOODS=[
+  {m:"Tired? That's your body — not your mind. Do the morning movement first. Movement creates energy. You don't wait for it.",f:false},
+  {m:"Meh. Students at Tetr aren't feeling meh right now — they're grinding. You have 30 days. Use them.",f:false},
+  {m:"Okay energy. Okay is enough to start. Start the hardest task first while it's manageable.",f:false},
+  {m:"Good energy. Channel it NOW — don't let it sit. Hit the deep work block immediately.",f:true},
+  {m:"LOCKED IN. 🔥 This is the exact state where life changes. Don't scroll. Don't talk. Go build.",f:true},
+];
+
+// Quran 30-day plan — focusing on Juz 30 revision
+const QURAN_PLAN=[
+  {d:"1-2",title:"Al-Fatiha + Al-Nas to Al-Fil",desc:"Revise the last 10 surahs of Juz 30. Listen to Sheikh Mishary 3x each, then recite from memory. Focus on pronunciation correctness."},
+  {d:"3-4",title:"Al-Humaza to Al-Takathur",desc:"Next block of Juz 30. Same method: listen 3x, recite 5x from memory, record yourself once to check Tajweed."},
+  {d:"5-6",title:"Al-Qaria to Al-Bayyinah",desc:"Continue backward through Juz 30. Make sure every letter is correct — this is the foundation for Ijazah."},
+  {d:"7-8",title:"Al-Qadr to Al-Shams",desc:"Longer surahs now. Break each into halves. Listen, repeat, memorise each half before combining."},
+  {d:"9-10",title:"Al-Balad to Al-A'la",desc:"Continue Juz 30. Harder surahs — more repetition needed. Minimum 20 repetitions per ayah for solid memorisation."},
+  {d:"11-14",title:"Full Juz 30 revision — continuous recitation",desc:"Recite Juz 30 from start to finish from memory daily. Time yourself. Find the gaps. Strengthen the weak spots."},
+  {d:"15-18",title:"Begin Juz 29 — first half",desc:"Start Juz 29. Same method. You're rebuilding, not learning new — it's already in your memory. You're just unlocking it."},
+  {d:"19-22",title:"Juz 29 — second half + combine",desc:"Complete Juz 29. Then recite Juz 29 + Juz 30 continuously from memory."},
+  {d:"23-26",title:"Begin Juz 28",desc:"Start Juz 28. Your brain will start recognising patterns — memorisation becomes faster now."},
+  {d:"27-30",title:"Review all 3 Juz + Tajweed focus",desc:"Recite Juz 28-29-30 from memory daily. Record yourself. Send to a Sheikh or knowledgeable person for correction. This is your foundation for Ijazah pursuit."},
+];
+
+const ARABIC_WEEKS=[
+  {w:"Week 1",title:"Foundations — Alphabet + Sounds",desc:"Goal: Read Arabic script fluently (even if slowly). Use Madinah Arabic Book 1 (PDF). Learn 20 vocabulary words. Practice: أنا (I), أنتَ (You), هذا (This), ماذا (What), كيف (How)."},
+  {w:"Week 2",title:"Basic Sentences + Greetings",desc:"Master: السلام عليكم, كيف حالك, أنا بخير, ما اسمك, أنا اسمي شبير. Learn 20 new vocab. Start ArabicPod101 free tier."},
+  {w:"Week 3",title:"Numbers, Time, Days",desc:"Count to 100. Learn days of the week. Tell the time. These are essential for real-world conversations and business context."},
+  {w:"Week 4",title:"Business Arabic Basics",desc:"Learn: شركة (company), اجتماع (meeting), عقد (contract), مشروع (project), نجاح (success). Practice 2 full sentences in Arabic daily."},
+];
+
+const SPANISH_WEEKS=[
+  {w:"Week 1",title:"Foundations — Core Pronunciation + Basics",desc:"Start Language Transfer Complete Spanish Episode 1-5 (free audio). Key rule: Spanish is 90% phonetic — you read what you see. Learn: yo (I), tú (you), quiero (I want), necesito (I need), tengo (I have)."},
+  {w:"Week 2",title:"Present Tense Sentences",desc:"Language Transfer Episodes 6-12. Form your first sentences: 'Yo quiero hablar español.' Learn 30 new words with Anki. Duolingo daily for reinforcement."},
+  {w:"Week 3",title:"Questions + Conversation Starters",desc:"How to ask: ¿Cómo te llamas? ¿De dónde eres? ¿Qué haces? Start watching Dreaming Spanish (beginner level) on YouTube. Aim for 30-minute comprehensible input."},
+  {w:"Week 4",title:"Build Your Introduction + Real Sentences",desc:"You should be able to introduce yourself fully in Spanish. Practice with Tandem app — find a native speaker. Language Transfer Episodes 20-25."},
+];
+
+const LEARN_MODULES=[
+  {title:"The Lean Startup — Core Principles",desc:"Why most businesses fail before they even launch, and how to avoid it."},
+  {title:"Unit Economics 101",desc:"The one concept every Tetr professor and investor will ask about."},
+  {title:"How to Read a Balance Sheet",desc:"Basic financial literacy — the floor, not the ceiling."},
+  {title:"Personal Branding Before University",desc:"How to show up on Day 1 as someone people already want to know."},
+  {title:"How VCs Think — The Investor Mindset",desc:"Understanding how startup funding actually works."},
+  {title:"Marketing Without a Budget",desc:"How to grow @TheRashidaDiaries without spending money."},
+  {title:"How to Cold DM and Get Replies",desc:"Practical outreach that actually works at your age."},
+  {title:"The Economics of Southeast Asia",desc:"Singapore, Malaysia, Indonesia — markets you'll live and work in."},
+  {title:"What Tetr College of Business Actually Is — and What You Need to Know",desc:"7 countries, real businesses, no fixed campus. Here's what you're actually walking into."},
+  {title:"How to Make Real Friends at University",desc:"The science and playbook for someone like you."},
+];
+
+const ACHIEVEMENTS=[
+  {id:"first",icon:"🏁",title:"First Task Done",desc:"The hardest step is step one.",req:s=>totalTasks(s)>=1},
+  {id:"ten",icon:"⚡",title:"10 Tasks Complete",desc:"You're not just talking anymore.",req:s=>totalTasks(s)>=10},
+  {id:"fifty",icon:"🔥",title:"50 Tasks Done",desc:"You're in the top 10% of people who start this.",req:s=>totalTasks(s)>=50},
+  {id:"hundred",icon:"💎",title:"100 Tasks — Elite",desc:"This is what Tetr looks like.",req:s=>totalTasks(s)>=100},
+  {id:"streak3",icon:"📆",title:"3-Day Streak",desc:"Consistency is rarer than talent.",req:s=>calcStreak(s)>=3},
+  {id:"streak7",icon:"🗓️",title:"7-Day Streak",desc:"One week. You're doing it.",req:s=>calcStreak(s)>=7},
+  {id:"streak14",icon:"🏆",title:"14-Day Streak",desc:"Halfway. Most people quit here.",req:s=>calcStreak(s)>=14},
+  {id:"quran7",icon:"📖",title:"7 Days of Quran",desc:"Consistent Quran revision — the Ijazah path is real.",req:s=>(s.quranDays||0)>=7},
+  {id:"lang7",icon:"🌐",title:"7 Days of Language",desc:"You're becoming multilingual. CVs love this.",req:s=>(s.langDays||0)>=7},
+  {id:"xp500",icon:"🌟",title:"500 XP",desc:"You're transforming. It's not visible yet — but it's happening.",req:s=>(s.xp||0)>=500},
+  {id:"xp1000",icon:"👑",title:"1000 XP — Untouchable",desc:"By the time you hit Tetr, you'll be a different person.",req:s=>(s.xp||0)>=1000},
+];
+
+// ── STATE ──────────────────────────────────────────────────────────────
+let S={};
+let vDay=1;
+let chatHistories={coach:[],workout:[],learn:[],arabic:[],spanish:[],quran:[]};
+
+function loadS(){
+  // Try localStorage first (works in browser)
+  try{S=JSON.parse(localStorage.getItem('gauntlet_v3')||'{}');}catch(e){S={};}
+  // If running in pywebview desktop app, load from disk via API
+  try{
+    if(window.pywebview && window.pywebview.api){
+      const diskData = window.pywebview.api.load_data();
+      if(diskData){
+        const parsed = JSON.parse(diskData);
+        if(parsed && parsed.geminiKey) S = {...S, ...parsed};
+      }
+    }
+  }catch(e){}
+  if(!S.startDate)S.startDate=new Date().toISOString().split('T')[0];
+  if(!S.checked)S.checked={};
+  if(!S.moods)S.moods={};
+  if(!S.reflections)S.reflections={};
+  if(!S.water)S.water={};
+  if(!S.xp)S.xp=0;
+  if(!S.geminiKey)S.geminiKey='';
+  if(!S.quranDays)S.quranDays=0;
+  if(!S.quranStates)S.quranStates={};
+  if(!S.langDays)S.langDays=0;
+}
+function saveS(){
+  const data = JSON.stringify(S);
+  // Save to localStorage (browser)
+  try{localStorage.setItem('gauntlet_v3', data);}catch(e){}
+  // Save via pywebview API (desktop app) - persists to config.json on disk
+  try{
+    if(window.pywebview && window.pywebview.api){
+      window.pywebview.api.save_data(data);
+      if(S.geminiKey) window.pywebview.api.save_key(S.geminiKey);
+    }
+  }catch(e){}
+}
+
+function getElapsed(){
+  const start=new Date(S.startDate),now=new Date();
+  return Math.min(29,Math.max(0,Math.floor((now-start)/86400000)));
+}
+function todayNum(){return getElapsed()+1;}
+function getCurrentDay(){return todayNum();}
+function totalTasks(s){return Object.values(s.checked||{}).reduce((sum,d)=>sum+Object.values(d).filter(Boolean).length,0);}
+function calcStreak(s){
+  const t=todayNum();let streak=0;
+  for(let d=t;d>=1;d--){
+    const k='day'+d,done=Object.values(s.checked[k]||{}).filter(Boolean).length;
+    if(done>=Math.floor(SCHEDULE.length*0.5))streak++;else break;
+  }
+  return streak;
+}
+
+// ── NAV ──────────────────────────────────────────────────────────────
+const TITLES={schedule:"Today's Schedule",news:"Today's News Brief",workout:"Workout + Nutrition",quran:"Quran Memorisation",languages:"Languages",coach:"AI Coach",learn:"Learn",progress:"Progress",settings:"Settings",'spanish-coach':"Spanish Coach",'accent-coach':"Accent Coach"};
+function openSidebar(){
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sb-overlay').classList.add('open');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sb-overlay').classList.remove('open');
+}
+function goPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+  document.getElementById('top-title').textContent=TITLES[id];
+  if(window.innerWidth<=768)closeSidebar();
+  if(id==='workout')renderWorkout();
+  if(id==='progress')renderProgress();
+  if(id==='settings'){
+    const k=document.getElementById('key-input');if(k)k.value=S.geminiKey||'';
+    const sd=document.getElementById('start-input');if(sd)sd.value=S.startDate||'';
+    document.getElementById('key-status').textContent=S.geminiKey?'✓ Key set ('+S.geminiKey.slice(0,8)+'...)':'No key set.';
+  }
+  if(id==='quran'){renderQuranTracker();}
+  if(id==='learn')renderLearnModule();
+  if(id==='languages')renderLanguages();
+  if(id==='spanish-coach'){ if(!scStarted){scStarted=true;scInit();} vcScrollBody('sc-body'); }
+  if(id==='accent-coach'){ if(!acStarted){acStarted=true;acInit();} vcScrollBody('ac-body'); }
+  // Stop any recording/speech when navigating away from voice coaches
+  if(id!=='spanish-coach'&&typeof scAbortListen==='function'){ scAbortListen(); }
+  if(id!=='accent-coach'&&typeof acAbortListen==='function'){ acAbortListen(); }
+  if(id!=='spanish-coach'&&id!=='accent-coach'){ try{window.speechSynthesis&&window.speechSynthesis.cancel();}catch(e){} }
+}
+
+// ── SCHEDULE ─────────────────────────────────────────────────────────
+function renderSchedule(){
+  const container=document.getElementById('tblocks');container.innerHTML='';
+  const key='day'+vDay;
+  if(!S.checked[key])S.checked[key]={};
+  const checked=S.checked[key];let done=0;
+  SCHEDULE.forEach((b,i)=>{
+    const ck=!!checked[i];if(ck)done++;
+    const div=document.createElement('div');
+    div.className='tb'+(ck?' done':'');
+    div.innerHTML=`<div class="tb-time">${b.time}</div>
+    <div class="tb-body">
+      <div class="tb-tags">${b.tags.map(t=>`<span class="tag tag-${t}">${t}</span>`).join('')}</div>
+      <div class="tb-title">${b.title}</div>
+      <div class="tb-desc">${b.desc}</div>
+    </div>
+    <div class="chk${ck?' done':''}" onclick="toggleCheck(${i})">${ck?'✓':''}</div>`;
+    container.appendChild(div);
+  });
+  document.getElementById('cal-prog').textContent=done+'/'+SCHEDULE.length;
+  document.getElementById('cal-lbl').textContent='Day '+vDay+(vDay===todayNum()?' — Today':'');
+  const ri=document.getElementById('refl-input');if(ri)ri.value=S.reflections['day'+vDay]||'';
+  const mi=S.moods['day'+vDay];
+  document.querySelectorAll('.mb').forEach((b,i)=>b.classList.toggle('sel',i===mi));
+  if(mi!==undefined){const el=document.getElementById('mood-msg');el.textContent=MOODS[mi].m;el.className='mood-msg'+(MOODS[mi].f?' fire':'');}
+  updateSidebar();
+}
+function toggleCheck(i){
+  const key='day'+vDay;if(!S.checked[key])S.checked[key]={};
+  const was=!!S.checked[key][i];S.checked[key][i]=!was;
+  if(!was)S.xp=(S.xp||0)+10;else S.xp=Math.max(0,(S.xp||0)-10);
+  // track quran/lang days
+  const tags=SCHEDULE[i].tags;
+  if(tags.includes('quran'))S.quranDays=(S.quranDays||0)+(was?-1:1);
+  if(tags.includes('language'))S.langDays=(S.langDays||0)+(was?-1:1);
+  saveS();renderSchedule();
+}
+function changeDay(d){vDay=Math.max(1,Math.min(30,vDay+d));renderSchedule();}
+function setMood(m){
+  S.moods['day'+vDay]=m;saveS();
+  document.querySelectorAll('.mb').forEach((b,i)=>b.classList.toggle('sel',i===m));
+  const el=document.getElementById('mood-msg');el.textContent=MOODS[m].m;el.className='mood-msg'+(MOODS[m].f?' fire':'');
+}
+function saveRefl(){
+  const v=document.getElementById('refl-input').value.trim();
+  if(v){S.reflections['day'+vDay]=v;saveS();}
+  const m=document.getElementById('refl-saved');m.style.display='inline';setTimeout(()=>m.style.display='none',2000);
+}
+
+// ── SIDEBAR ──────────────────────────────────────────────────────────
+function updateSidebar(){
+  const day=todayNum(),streak=calcStreak(S),xp=S.xp||0;
+  const key='day'+vDay,done=Object.values(S.checked[key]||{}).filter(Boolean).length;
+  document.getElementById('s-day').textContent=day;
+  document.getElementById('s-streak').textContent=streak;
+  document.getElementById('s-xp').textContent=xp;
+  document.getElementById('s-done').textContent=done;
+  document.getElementById('streak-badge').textContent='🔥 '+streak+' day'+(streak!==1?'s':'');
+  const opts={weekday:'short',month:'short',day:'numeric'};
+  document.getElementById('top-date').textContent=new Date().toLocaleDateString('en-US',opts)+' · '+(30-day+1)+' days left';
+  const level=Math.floor(xp/100)+1,xpInL=xp%100;
+  document.getElementById('s-level').textContent=level;
+  document.getElementById('s-xp-to').textContent=(100-xpInL)+' to next';
+  document.getElementById('xp-fill').style.width=xpInL+'%';
+}
+
+// ── WORKOUT ──────────────────────────────────────────────────────────
+function renderWorkout(){
+  const idx=(todayNum()-1)%4,w=WORKOUTS[idx];
+  document.getElementById('wk-name').textContent=w.name;
+  document.getElementById('wk-desc').textContent=w.desc;
+  document.getElementById('wk-exs').innerHTML=w.exs.map(e=>`
+    <div class="excrd"><div class="ex-name">${e.name}</div><div class="ex-sets">${e.sets}</div><div class="ex-note">${e.note}</div></div>
+  `).join('');
+  const eo=EAT[new Date().getDay()%2];
+  document.getElementById('eat-list').innerHTML=eo.map(e=>`<div class="ni3"><span style="color:var(--green)">✓</span> ${e}</div>`).join('');
+  document.getElementById('avoid-list').innerHTML=AVOID.map(a=>`<div class="ni3"><span style="color:var(--red)">✗</span> ${a}</div>`).join('');
+  const wk='water'+new Date().toISOString().split('T')[0],filled=S.water[wk]||0;
+  const gEl=document.getElementById('glasses');gEl.innerHTML='';
+  for(let i=0;i<6;i++){
+    const g=document.createElement('div');g.className='glass'+(i<filled?' filled':'');
+    g.textContent='🥤';g.title=(i+1)*500+'ml';
+    g.onclick=()=>{S.water[wk]=i<filled?i:i+1;saveS();renderWorkout();};
+    gEl.appendChild(g);
+  }
+}
+
+// ── QURAN ─────────────────────────────────────────────────────────────
+
+
+// ── LANGUAGES ────────────────────────────────────────────────────────
+function switchLang(lang,el){
+  document.querySelectorAll('.ltab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.lang-section').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('lang-'+lang).classList.add('active');
+}
+
+function renderLanguages(){
+  const day=todayNum();
+  document.getElementById('arabic-day-num').textContent=day;
+  document.getElementById('spanish-day-num').textContent=day;
+  const weekIdx=Math.min(Math.floor((day-1)/7),ARABIC_WEEKS.length-1);
+  const aw=ARABIC_WEEKS[weekIdx],sw=SPANISH_WEEKS[weekIdx];
+  document.getElementById('arabic-plan').innerHTML=`
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px;">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:5px;">${aw.w}</div>
+      <div style="font-size:14px;font-weight:500;margin-bottom:6px;">${aw.title}</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6;">${aw.desc}</div>
+    </div>`;
+  document.getElementById('spanish-plan').innerHTML=`
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px;">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:5px;">${sw.w}</div>
+      <div style="font-size:14px;font-weight:500;margin-bottom:6px;">${sw.title}</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6;">${sw.desc}</div>
+    </div>`;
+}
+
+// ── GEMINI ───────────────────────────────────────────────────────────
+const SHABBIR=`You are Shabbir's personal AI — coach, tutor, advisor. Everything about him:
+- 18 years old, Dubai
+- Going to Tetr College of Business (Singapore) in 2-3 months, studying Business Management & Technology
+- Very competitive — students rejected from Ivy League attend Tetr
+- 65kg, 170cm, not fit but wants visible muscle. Has dumbbells, pull-up bar, punching bag at home
+- Skips meals, eats too much sugar, zero structured routine currently
+- Co-founded @TheRashidaDiaries (lifestyle/culture content platform), built CFO.AI (financial intelligence MVP for SMEs)
+- National Startup Fellowship, Founder's Office internship — real credentials at 18
+- Zero income, family-dependent, wants to change this before university
+- Confident speaker with adults, unsure about connecting with peers his age, worried about real friendships at university
+- Already memorised the full Quran, hasn't recited in 7 years, wants to revise and get Egyptian Ijazah
+- Learning Arabic (has basics) + Spanish (complete beginner)
+- Fluent in English, Hindi, Gujarati
+- Responds to harsh, competitive, progress-based motivation
+- Good-looking (told by many), occasionally insecure about hair/beard
+Your style: Direct, invested, specific to his context. Reference his real situation. Harsh when needed. No generic advice. Speak like a person, not a list.`;
+
+async function gemini(system,msgs,max=800){
+  const key = (GEMINI_KEY || S.geminiKey || '').trim();
+  if(!key){ console.error('No API key set'); return null; }
+  const contents=msgs.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]}));
+  try{
+    const url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`;
+    const body=JSON.stringify({system_instruction:{parts:[{text:system}]},contents,generationConfig:{maxOutputTokens:max}});
+    const d = await new Promise((resolve,reject)=>{
+      const xhr=new XMLHttpRequest();
+      xhr.open('POST',url,true);
+      xhr.setRequestHeader('Content-Type','application/json');
+      xhr.timeout=20000;
+      xhr.onload=()=>{try{resolve(JSON.parse(xhr.responseText));}catch(e){reject(e);}};
+      xhr.onerror=()=>reject(new Error('Network error'));
+      xhr.ontimeout=()=>reject(new Error('Timeout'));
+      xhr.send(body);
+    });
+    if(d.error){ console.error('Gemini error:', d.error.code, d.error.message); return null; }
+    return d?.candidates?.[0]?.content?.parts?.[0]?.text||null;
+  }catch(e){ console.error('Gemini fetch error:', e); return null; }
+}
+
+// ── CHAT HELPERS ─────────────────────────────────────────────────────
+function addMsg(id,text,cls){
+  const c=document.getElementById(id);
+  const d=document.createElement('div');d.className='cmsg '+cls;d.textContent=text;
+  c.appendChild(d);c.scrollTop=c.scrollHeight;
+}
+function renderChat(id,hist){
+  const c=document.getElementById(id);c.innerHTML='';
+  hist.forEach(m=>{const d=document.createElement('div');d.className='cmsg '+(m.role==='user'?'user':'coach');d.textContent=m.content;c.appendChild(d);});
+  c.scrollTop=c.scrollHeight;
+}
+async function doChat(inputId,chatId,histKey,sysPrompt,maxTok=600){
+  const inp=document.getElementById(inputId);const msg=inp.value.trim();if(!msg)return;
+  inp.value='';
+  chatHistories[histKey].push({role:'user',content:msg});
+  renderChat(chatId,chatHistories[histKey]);
+  if(!GEMINI_KEY && !S.geminiKey){addMsg(chatId,'Add your Gemini API key in Settings.','coach');return;}
+  addMsg(chatId,'Thinking...','coach thinking');
+  const reply=await gemini(sysPrompt,chatHistories[histKey],maxTok);
+  document.getElementById(chatId).lastChild?.remove();
+  if(reply){chatHistories[histKey].push({role:'assistant',content:reply});addMsg(chatId,reply,'coach');}
+  else addMsg(chatId,'Error — check API key in Settings.','coach');
+}
+
+// ── SPECIFIC CHATS ────────────────────────────────────────────────────
+function askCoach(){doChat('coach-input','coach-chat','coach',SHABBIR,700);}
+function qCoach(t){document.getElementById('coach-input').value=t;askCoach();}
+function askWorkout(){doChat('wk-q','wk-chat','workout',SHABBIR+'\nAnswer workout/fitness questions specifically. Practical. Max 200 words.',400);}
+function qWorkout(t){document.getElementById('wk-q').value=t;askWorkout();}
+function askLearn(){doChat('learn-input','learn-chat','learn',SHABBIR+'\nYou are his tutor. Teach clearly with real examples. Engaging, not textbook. Max 300 words.',600);}
+function qLearn(t){document.getElementById('learn-input').value=t;askLearn();}
+function askArabic(){doChat('arabic-q','arabic-chat','arabic',SHABBIR+'\nYou are his Arabic tutor. He has basics and Quranic exposure. Teach MSA + Gulf dialect. Practical lessons. Max 300 words.',600);}
+function qLang(lang,t){document.getElementById(lang+'-q').value=t;if(lang==='arabic')askArabic();else askSpanish();}
+function askSpanish(){doChat('spanish-q','spanish-chat','spanish',SHABBIR+'\nYou are his Spanish tutor. Complete beginner. Teach practical conversational Spanish. Language Transfer methodology. Max 300 words.',600);}
+function askQuran(){doChat('quran-q','quran-chat','quran',SHABBIR+'\nYou are his Quran guide. He memorised the Quran 7 years ago, revising for Egyptian Ijazah. Answer memorisation technique, Tajweed, study method. Respectful tone. Max 300 words.',600);}
+
+// ── NEWS ─────────────────────────────────────────────────────────────
+async function loadNews(){
+  const container = document.getElementById('news-container');
+  const btn = document.getElementById('news-btn');
+  const status = document.getElementById('news-status');
+
+  const key = (GEMINI_KEY || S.geminiKey || '').trim();
+
+  if(!key){
+    container.innerHTML = '<div class="card"><div style="font-size:13px;color:var(--red);">No API key set. Go to <strong>Settings</strong> and paste your Gemini key, or open the HTML file and put it in <code>const GEMINI_KEY = ""</code>. Get a free key at <a href="https://aistudio.google.com/app/apikey" style="color:var(--accent)">aistudio.google.com</a></div></div>';
+    status.textContent = 'No key set';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Loading...';
+  status.textContent = 'Calling Gemini...';
+  container.innerHTML = '';
+
+  const today = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const prompt = `Use Google Search to find the latest news from today (${today}) or the past 24 hours. You are a world news editor briefing an informed 18-year-old.
+
+Search for and give exactly 12 news stories from TODAY. Prioritise:
+1. Global conflicts & geopolitics (wars, ceasefires, diplomacy — anything active right now)
+2. American politics (Trump, Congress, White House, major policy decisions)
+3. Global economy & finance (markets, inflation, central banks, oil, trade deals, major corps)
+4. AI & technology (model releases, regulation, breakthroughs, major product launches)
+5. Middle East, South Asia, Southeast Asia (Dubai/Singapore relevant — cover at least 2 stories)
+6. Sports (only if genuinely major — World Cup, IPL, Champions League finals, Olympics)
+7. Science, climate, health (major discoveries or crises)
+8. Any other significant breaking story from today
+
+For EVERY story use EXACTLY this format — labels must be on their own lines:
+
+STORY 1:
+HEADLINE: [specific headline with real names, real place, today's date context]
+WHAT: [3 sentences — exactly what happened, with real numbers, real names, real locations. No vague language.]
+CONTEXT: [2 sentences — what led to this, why it's been building, background a non-expert needs]
+WHY IT MATTERS: [2 sentences — concrete real-world impact on people, markets, or geopolitics]
+
+STORY 2:
+HEADLINE: [specific headline]
+WHAT: [3 sentences]
+CONTEXT: [2 sentences]
+WHY IT MATTERS: [2 sentences]
+
+Continue this exact format for stories 3 through 12.
+
+CRITICAL RULES:
+- Only use news from the past 24 hours. If you cannot find today's news on a topic, skip it and find a different story that IS from today.
+- Never use the words "various", "some", "many officials", "experts say" without names.
+- Always include real names of people, real country names, real numbers (dollar amounts, casualty counts, percentages).
+- Do not add any intro, outro, or commentary outside the STORY blocks. Start immediately with STORY 1.`;
+
+  // Models with Google Search grounding — this enables REAL-TIME news via live Google Search
+  const MODEL_CONFIGS = [
+    { model: 'gemini-2.0-flash',      tools: [{ google_search: {} }] },
+    { model: 'gemini-2.5-flash',      tools: [{ google_search: {} }] },
+    { model: 'gemini-2.0-flash-lite', tools: [{ google_search: {} }] },
+    { model: 'gemini-1.5-flash',      tools: [{ google_search_retrieval: { dynamic_retrieval_config: { mode: 'MODE_ALWAYS' } } }] },
+    { model: 'gemini-1.5-flash-8b',   tools: [] },
+  ];
+
+  let text = null;
+  let lastError = '';
+
+  try{
+    for(const cfg of MODEL_CONFIGS){
+      status.textContent = 'Searching news via ' + cfg.model + '...';
+      try{
+        const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + cfg.model + ':generateContent?key=' + key;
+        const reqBody = { contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: 4000 } };
+        if(cfg.tools.length) reqBody.tools = cfg.tools;
+        const body = JSON.stringify(reqBody);
+        // XMLHttpRequest — works reliably in pywebview file:// context
+        const data = await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', url, true);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.timeout = 45000;
+          xhr.onload = () => {
+            try { resolve(JSON.parse(xhr.responseText)); }
+            catch(e) { reject(new Error('Parse error: ' + xhr.responseText.slice(0,200))); }
+          };
+          xhr.onerror = () => reject(new Error('Network error'));
+          xhr.ontimeout = () => reject(new Error('Timeout after 45s'));
+          xhr.send(body);
+        });
+        if(data.error){
+          const code = data.error.code;
+          lastError = cfg.model + ': ' + code + ' - ' + data.error.message;
+          console.warn(lastError);
+          if(code === 401 || code === 403){
+            lastError = 'AUTH_' + code + ': Invalid API key. Go to Settings and paste a valid Gemini key.';
+            break;
+          }
+          continue;
+        }
+        const candidate = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if(candidate){
+          text = candidate;
+          const grounded = data?.candidates?.[0]?.groundingMetadata?.webSearchQueries?.length > 0;
+          status.textContent = (grounded ? '🌐 Live search via ' : '⚠ Cached data from ') + cfg.model;
+          break;
+        }
+      } catch(modelErr){
+        lastError = cfg.model + ': ' + modelErr.message;
+        console.warn(lastError);
+        continue;
+      }
+    }
+
+    if(!text){
+      const isAuthErr = lastError.includes('AUTH_') || lastError.includes('Invalid API key');
+      const is429 = lastError.includes('429');
+      const hint = isAuthErr
+        ? 'Your API key is invalid or missing. Go to <strong>Settings</strong> and paste a fresh key from <a href="https://aistudio.google.com/app/apikey" style="color:var(--accent)">aistudio.google.com</a> (free).'
+        : is429
+          ? 'Rate limited. Wait 60 seconds, then try again.'
+          : 'Google servers are busy (503). Wait 2-3 minutes and try again.';
+      container.innerHTML = '<div class="card">' +
+        '<div style="font-size:14px;font-weight:500;color:var(--red);margin-bottom:8px;">' + (isAuthErr ? 'API Key Error' : 'Failed to load news') + '</div>' +
+        '<div style="font-size:13px;color:var(--muted);line-height:1.7;">' + hint + '<br><br>' +
+        '<span style="font-size:11px;opacity:0.6;">Debug: ' + lastError + '</span></div></div>';
+      status.textContent = isAuthErr ? 'Bad API key' : 'Failed — try again';
+      btn.disabled = false;
+      btn.textContent = 'Try Again';
+      return;
+    }
+
+    // Parse and render
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = '<div class="card-lbl">' + today + '</div>';
+
+    // Split on STORY N: pattern
+    const stories = text.split(/\nSTORY \d+:/i).filter(s => s.trim());
+    if(stories.length === 0){
+      // Fallback: just show the raw text
+      const pre = document.createElement('div');
+      pre.style.cssText = 'font-size:13px;line-height:1.8;color:var(--muted);white-space:pre-wrap;padding:4px 0;';
+      pre.textContent = text;
+      card.appendChild(pre);
+    } else {
+      stories.forEach((block, i) => {
+        const lines = block.trim().split('\n').map(l => l.trim()).filter(l => l);
+        
+        // Extract each field — accumulate continuation lines under each label
+        let headline = '', what = '', context = '', why = '';
+        let cur = null;
+        lines.forEach(line => {
+          if(line.startsWith('HEADLINE:'))           { cur='h'; headline = line.replace('HEADLINE:','').trim(); }
+          else if(line.startsWith('WHAT:'))          { cur='w'; what    = line.replace('WHAT:','').trim(); }
+          else if(line.startsWith('CONTEXT:'))       { cur='c'; context = line.replace('CONTEXT:','').trim(); }
+          else if(line.startsWith('WHY IT MATTERS:')){ cur='y'; why     = line.replace('WHY IT MATTERS:','').trim(); }
+          else if(cur === 'w') what    += ' ' + line;
+          else if(cur === 'c') context += ' ' + line;
+          else if(cur === 'y') why     += ' ' + line;
+        });
+
+        // Fallback if structured parsing didn't work
+        if(!headline && lines.length > 0) headline = lines[0].replace(/^[*_:#\s]+|[*_:#\s]+$/g,'');
+        if(!what && lines.length > 1) what = lines.slice(1).join(' ').slice(0, 400);
+
+        const CATEGORIES = ['Global Conflict','US Politics','Finance','AI & Tech','Middle East / SEA','Sports','Science / Health','World','World','World','World','World'];
+        const cat = CATEGORIES[i] || 'News';
+
+        const item = document.createElement('div');
+        item.className = 'ni2';
+        item.style.cssText = 'padding:16px 0;';
+        item.innerHTML =
+          '<div class="ni2-top" style="margin-bottom:6px;">' +
+            '<div class="ni2-title" style="font-size:15px;font-weight:600;line-height:1.4;">' + headline + '</div>' +
+            '<span class="ncat" style="flex-shrink:0;">' + cat + '</span>' +
+          '</div>' +
+          (what    ? '<div style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:5px;">' + what + '</div>' : '') +
+          (context ? '<div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:5px;font-style:italic;">Background: ' + context + '</div>' : '') +
+          (why     ? '<div style="font-size:12px;color:var(--accent);line-height:1.6;padding-top:6px;border-top:1px solid var(--border);margin-top:4px;">Why it matters: ' + why + '</div>' : '');
+        card.appendChild(item);
+      });
+    }
+
+    container.appendChild(card);
+    status.textContent = 'Updated ' + new Date().toLocaleTimeString();
+
+  } catch(e) {
+    container.innerHTML = '<div class="card"><div style="font-size:13px;color:var(--red);">Network error: ' + e.message + '</div></div>';
+    status.textContent = 'Error';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Refresh';
+}
+
+
+// ── LEARN ─────────────────────────────────────────────────────────────
+function renderLearnModule(){
+  const day=todayNum();
+  const mod=LEARN_MODULES[(day-1)%LEARN_MODULES.length];
+  document.getElementById('learn-title').textContent=mod.title;
+  document.getElementById('learn-desc').textContent=mod.desc;
+  document.getElementById('learn-result-card').style.display='none';
+}
+async function loadLesson(){
+  if(!GEMINI_KEY && !S.geminiKey){addMsg('learn-chat','Add API key in Settings.','coach');return;}
+  const btn=document.getElementById('learn-btn');btn.textContent='Loading...';btn.disabled=true;
+  const day=todayNum();const mod=LEARN_MODULES[(day-1)%LEARN_MODULES.length];
+  const prompt=`Teach Shabbir about: "${mod.title}". Context: ${mod.desc}. He is 18, Dubai, Tetr College of Business Singapore student (starting soon), built CFO.AI and @TheRashidaDiaries, zero formal business education, very competitive. Write 350-400 words. Start with why this matters to HIM personally. Use real examples. End with one thing he can do TODAY to apply this. Speak directly to him.`;
+  const reply=await gemini(SHABBIR,[{role:'user',content:prompt}],900);
+  if(reply){
+    const rc=document.getElementById('learn-result-card');rc.style.display='block';
+    const el=document.getElementById('learn-result');el.textContent='';
+    let i=0;const type=()=>{if(i<reply.length){el.textContent+=reply[i];i++;setTimeout(type,10);}};type();
+  }
+  btn.textContent="Generate Today's Lesson";btn.disabled=false;
+}
+
+// ── PROGRESS ─────────────────────────────────────────────────────────
+function renderProgress(){
+  const today=todayNum(),streak=calcStreak(S),xp=S.xp||0,total=totalTasks(S);
+  document.getElementById('p-streak').textContent=streak;
+  document.getElementById('p-xp').textContent=xp;
+  document.getElementById('p-tasks').textContent=total;
+  const grid=document.getElementById('sgrid');grid.innerHTML='';
+  for(let d=1;d<=30;d++){
+    const k='day'+d,done=Object.values(S.checked[k]||{}).filter(Boolean).length;
+    const pct=done/SCHEDULE.length,isToday=d===today;
+    let cls='sdot';
+    if(isToday)cls+=' today';else if(pct>=0.5)cls+=' done';else if(pct>0&&d<today)cls+=' partial';
+    const dot=document.createElement('div');dot.className=cls;dot.textContent=d;dot.title='Day '+d+': '+done+' done';
+    grid.appendChild(dot);
+  }
+  const wc=document.getElementById('wchart');const days=['S','M','T','W','T','F','S'];wc.innerHTML='';
+  for(let i=0;i<7;i++){
+    const d=today-6+i;const k='day'+d;
+    const done=d>0?Object.values(S.checked[k]||{}).filter(Boolean).length:0;
+    const pct=d>0?Math.round((done/SCHEDULE.length)*100):0;
+    const todayDow=new Date().getDay();const label=days[(todayDow-6+i+7)%7];
+    wc.innerHTML+=`<div class="wkcol"><div style="font-size:10px;color:${d===today?'var(--accent)':'var(--muted)'};margin-bottom:3px;">${pct>0?pct+'%':''}</div><div class="wkbar" style="height:75px;"><div class="wkfill" style="height:${pct}%;"></div></div><div class="wklbl" style="color:${d===today?'var(--accent)':'var(--muted)'}">${label}</div></div>`;
+  }
+  const al=document.getElementById('achlist');al.innerHTML='';
+  ACHIEVEMENTS.forEach(a=>{
+    const unlocked=a.req(S);const div=document.createElement('div');
+    div.className='ach'+(unlocked?'':' locked');
+    div.innerHTML=`<div class="ach-icon">${a.icon}</div><div><div style="font-size:13px;font-weight:500;">${a.title}</div><div style="font-size:12px;color:var(--muted);">${a.desc}</div></div>`;
+    al.appendChild(div);
+  });
+}
+
+// ── SETTINGS ─────────────────────────────────────────────────────────
+function saveKey(){
+  const v=document.getElementById('key-input').value.trim();
+  if(v){
+    S.geminiKey=v;
+    saveS();
+    // Directly save key to disk if in desktop app
+    try{
+      if(window.pywebview && window.pywebview.api){
+        window.pywebview.api.save_key(v);
+        console.log('[App] Key saved to disk');
+      }
+    }catch(e){}
+  }
+  const m=document.getElementById('key-saved');m.style.display='inline';
+  document.getElementById('key-status').textContent='Key saved: '+v.slice(0,8)+'... ('+( window.pywebview ? 'saved to disk' : 'saved in browser')+')';
+  setTimeout(()=>m.style.display='none',2500);
+}
+function saveStart(){
+  const v=document.getElementById('start-input').value;
+  if(v){S.startDate=v;saveS();}
+  const m=document.getElementById('start-saved');m.style.display='inline';
+  setTimeout(()=>m.style.display='none',2000);updateSidebar();
+}
+function resetAll(){
+  if(!confirm('Reset all task progress and XP? API key and start date stay.'))return;
+  const k=S.geminiKey,sd=S.startDate;
+  S={startDate:sd,checked:{},moods:{},reflections:{},water:{},xp:0,geminiKey:k,quranDays:0,langDays:0};
+  saveS();vDay=todayNum();renderSchedule();updateSidebar();
+}
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){
+    const id=document.querySelector('.page.active')?.id?.replace('page-','');
+    if(id==='coach')askCoach();if(id==='learn')askLearn();if(id==='workout')askWorkout();
+  }
+});
+// ── QURAN TRACKER ────────────────────────────────────────────────────
+const JUZ_DATA = [
+  {n:1,  name:"Al-Fatiha + Al-Baqarah start",   surahs:"Al-Fatiha (1) — Al-Baqarah 1-141"},
+  {n:2,  name:"Al-Baqarah middle",               surahs:"Al-Baqarah 142-252"},
+  {n:3,  name:"Al-Baqarah end + Al-Imran",       surahs:"Al-Baqarah 253 — Al-Imran 92"},
+  {n:4,  name:"Al-Imran end + An-Nisa start",    surahs:"Al-Imran 93 — An-Nisa 23"},
+  {n:5,  name:"An-Nisa middle",                  surahs:"An-Nisa 24-147"},
+  {n:6,  name:"An-Nisa end + Al-Maidah",         surahs:"An-Nisa 148 — Al-Maidah 81"},
+  {n:7,  name:"Al-Maidah end + Al-Anam",         surahs:"Al-Maidah 82 — Al-Anam 110"},
+  {n:8,  name:"Al-Anam end + Al-Araf",           surahs:"Al-Anam 111 — Al-Araf 87"},
+  {n:9,  name:"Al-Araf end + Al-Anfal",          surahs:"Al-Araf 88 — Al-Anfal 40"},
+  {n:10, name:"Al-Anfal end + At-Tawbah",        surahs:"Al-Anfal 41 — At-Tawbah 92"},
+  {n:11, name:"At-Tawbah end + Yunus + Hud",     surahs:"At-Tawbah 93 — Hud 5"},
+  {n:12, name:"Hud + Yusuf",                     surahs:"Hud 6 — Yusuf 52"},
+  {n:13, name:"Yusuf end + Ibrahim + Al-Hijr",   surahs:"Yusuf 53 — Ibrahim 52"},
+  {n:14, name:"Al-Hijr + An-Nahl",               surahs:"Al-Hijr 1 — An-Nahl 128"},
+  {n:15, name:"Al-Isra + Al-Kahf start",         surahs:"Al-Isra 1 — Al-Kahf 74"},
+  {n:16, name:"Al-Kahf end + Maryam + Ta-Ha",    surahs:"Al-Kahf 75 — Ta-Ha 135"},
+  {n:17, name:"Al-Anbiya + Al-Hajj",             surahs:"Al-Anbiya 1 — Al-Hajj 78"},
+  {n:18, name:"Al-Muminun + An-Nur + Al-Furqan", surahs:"Al-Muminun 1 — Al-Furqan 20"},
+  {n:19, name:"Al-Furqan end — An-Naml",         surahs:"Al-Furqan 21 — An-Naml 55"},
+  {n:20, name:"An-Naml end + Al-Qasas",          surahs:"An-Naml 56 — Al-Ankabut 45"},
+  {n:21, name:"Al-Ankabut end — Al-Ahzab",       surahs:"Al-Ankabut 46 — Al-Ahzab 30"},
+  {n:22, name:"Al-Ahzab end — Ya-Sin",           surahs:"Al-Ahzab 31 — Ya-Sin 27"},
+  {n:23, name:"Ya-Sin end — Az-Zumar start",     surahs:"Ya-Sin 28 — Az-Zumar 31"},
+  {n:24, name:"Az-Zumar end — Fussilat",         surahs:"Az-Zumar 32 — Fussilat 46"},
+  {n:25, name:"Fussilat end — Al-Jathiyah",      surahs:"Fussilat 47 — Al-Jathiyah 37"},
+  {n:26, name:"Al-Ahqaf — Adh-Dhariyat",         surahs:"Al-Ahqaf 1 — Adh-Dhariyat 30"},
+  {n:27, name:"Adh-Dhariyat end — Al-Hadid",     surahs:"Adh-Dhariyat 31 — Al-Hadid 29"},
+  {n:28, name:"Al-Mujadila — At-Tahrim",         surahs:"Al-Mujadila 1 — At-Tahrim 12"},
+  {n:29, name:"Al-Mulk — Al-Mursalat",           surahs:"Al-Mulk (67) — Al-Mursalat (77)"},
+  {n:30, name:"Juz Amma — START HERE",           surahs:"An-Naba (78) — An-Nas (114)"},
+];
+
+const STATE_CONFIG = {
+  'null':   {bg:'var(--bg4)',                    border:'var(--border)',  color:'var(--muted)', label:''},
+  'strong': {bg:'rgba(62,207,142,0.18)',          border:'#3ecf8e',        color:'#3ecf8e',      label:'✓'},
+  'weak':   {bg:'rgba(232,197,71,0.18)',          border:'#e8c547',        color:'#e8c547',      label:'⚠'},
+  'vweak':  {bg:'rgba(240,101,101,0.18)',         border:'#f06565',        color:'#f06565',      label:'✗'},
+};
+
+let _selectedJuzN = null;
+
+function renderQuranTracker(){
+  const grid = document.getElementById('quran-grid');
+  if(!grid) return;
+  if(!S.quranStates) S.quranStates = {};
+  grid.innerHTML = '';
+  let counts = {strong:0, weak:0, vweak:0, none:0};
+  JUZ_DATA.forEach(juz => {
+    const state  = S.quranStates[juz.n] || null;
+    const cfgKey = state || 'null';
+    const cfg    = STATE_CONFIG[cfgKey] || STATE_CONFIG['null'];
+    if(state) counts[state]++; else counts.none++;
+    const btn = document.createElement('div');
+    btn.style.cssText = 'background:'+cfg.bg+';border:2px solid '+cfg.border+';border-radius:10px;padding:10px 4px;text-align:center;cursor:pointer;transition:all 0.15s;user-select:none;';
+    btn.innerHTML = `<div style="font-family:var(--font-heading,sans-serif);font-size:24px;color:${cfg.color};line-height:1;">${juz.n}</div><div style="font-size:10px;color:${cfg.color};margin-top:2px;min-height:13px;">${cfg.label}</div>`;
+    btn.title = `Juz ${juz.n}: ${juz.surahs}`;
+    btn.onmouseover = () => btn.style.transform = 'translateY(-2px)';
+    btn.onmouseout  = () => btn.style.transform = '';
+    btn.onclick = () => cycleJuzState(juz.n);
+    grid.appendChild(btn);
+  });
+  const el = id => document.getElementById(id);
+  if(el('q-strong')) el('q-strong').textContent = counts.strong;
+  if(el('q-weak'))   el('q-weak').textContent   = counts.weak;
+  if(el('q-vweak'))  el('q-vweak').textContent  = counts.vweak;
+  if(el('q-none'))   el('q-none').textContent   = counts.none;
+  const s = (counts.strong/30)*100, w = (counts.weak/30)*100, v = (counts.vweak/30)*100;
+  if(el('q-bar-strong')){ el('q-bar-strong').style.width=s+'%'; }
+  if(el('q-bar-weak'))  { el('q-bar-weak').style.left=s+'%';   el('q-bar-weak').style.width=w+'%'; }
+  if(el('q-bar-vweak')) { el('q-bar-vweak').style.left=(s+w)+'%'; el('q-bar-vweak').style.width=v+'%'; }
+}
+
+function openJuzDetail(juz){
+  _selectedJuzN = juz.n;
+  const state = S.quranStates ? (S.quranStates[juz.n] || null) : null;
+  const stateLabel = state==='strong'?'<span style="color:#3ecf8e">Strong ✓</span>':state==='weak'?'<span style="color:#e8c547">Weak ⚠</span>':state==='vweak'?'<span style="color:#f06565">Very Weak ✗</span>':'<span style="color:var(--muted)">Not assessed</span>';
+  document.getElementById('q-detail-title').textContent = 'Juz '+juz.n+' — '+juz.name;
+  document.getElementById('q-detail-body').innerHTML = '<strong style="color:var(--text)">Surahs:</strong> '+juz.surahs+'<br><strong style="color:var(--text)">Status:</strong> '+stateLabel+'<br><br><em style="color:var(--muted)">Recite from memory. No hesitation = Strong. Occasional mistakes = Weak. Need to look often = Very Weak.</em>';
+  document.getElementById('q-detail-card').style.display = 'block';
+  document.getElementById('q-detail-card').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function setJuzState(state){
+  if(_selectedJuzN === null) return;
+  if(!S.quranStates) S.quranStates = {};
+  S.quranStates[_selectedJuzN] = state === 'none' ? null : state;
+  saveS();
+  renderQuranTracker();
+  const juz = JUZ_DATA.find(j => j.n === _selectedJuzN);
+  if(juz) openJuzDetail(juz);
+}
+
+function cycleJuzState(n){
+  if(!S.quranStates) S.quranStates = {};
+  const current = S.quranStates[n] || null;
+  const cycle = [null, 'strong', 'weak', 'vweak'];
+  const idx = cycle.indexOf(current);
+  S.quranStates[n] = cycle[(idx + 1) % cycle.length];
+  saveS();
+  renderQuranTracker();
+}
+
+
+// ── SCHEDULE OVERLAY ─────────────────────────────────────────────────
+(function(){
+  let _vis=true,_d=false,_dx=0,_dy=0;
+  function _mins(){
+    let l=0;
+    return SCHEDULE.map(b=>{
+      const[h,m]=b.time.split(':').map(Number);
+      let t=h*60+m;
+      if(t<=l)t+=720;
+      l=t;return t;
+    });
+  }
+  function _now(){
+    const nm=new Date().getHours()*60+new Date().getMinutes(),T=_mins();
+    let i=0;
+    for(let j=0;j<T.length;j++){if(nm>=T[j])i=j;else break;}
+    return{c:SCHEDULE[i],n:SCHEDULE[i+1]||null};
+  }
+  window.ovUpdate=function(){
+    const{c,n}=_now();
+    const te=document.getElementById('ov-time'),tl=document.getElementById('ov-title'),nx=document.getElementById('ov-next');
+    if(!te)return;
+    const now=new Date();
+    const hh=String(now.getHours()).padStart(2,'0'),mm=String(now.getMinutes()).padStart(2,'0');
+    te.textContent='⏰ '+hh+':'+mm+'  ·  slot '+c.time;
+    tl.textContent=c.title;
+    nx.textContent=n?'Next: '+n.time+' · '+n.title.split(' ').slice(0,5).join(' '):'All done for today 🎉';
+  };
+  window.ovToggle=function(){
+    _vis=!_vis;
+    document.getElementById('ov-box').style.display=_vis?'block':'none';
+    document.getElementById('ov-dot').style.display=_vis?'none':'flex';
+  };
+  const w=document.getElementById('ov-wrap');
+  if(w){
+    const dn=e=>{
+      if(e.target.closest&&e.target.closest('button'))return;
+      const t=e.touches?e.touches[0]:e;const r=w.getBoundingClientRect();
+      _dx=t.clientX-r.left;_dy=t.clientY-r.top;_d=true;e.preventDefault();
+    };
+    const mv=e=>{
+      if(!_d)return;const t=e.touches?e.touches[0]:e;
+      w.style.right='auto';w.style.bottom='auto';
+      w.style.left=Math.max(0,Math.min(window.innerWidth-w.offsetWidth,t.clientX-_dx))+'px';
+      w.style.top=Math.max(0,Math.min(window.innerHeight-w.offsetHeight,t.clientY-_dy))+'px';
+      e.preventDefault();
+    };
+    const up=()=>{_d=false;};
+    w.addEventListener('mousedown',dn);
+    w.addEventListener('touchstart',dn,{passive:false});
+    document.addEventListener('mousemove',mv);
+    document.addEventListener('touchmove',mv,{passive:false});
+    document.addEventListener('mouseup',up);
+    document.addEventListener('touchend',up);
+    document.getElementById('ov-toggle').onclick=ovToggle;
+    document.getElementById('ov-dot').onclick=ovToggle;
+  }
+  ovUpdate();
+  setInterval(ovUpdate,60000);
+})();
+
+// ══════════════════════════════════════════════════════════════════════
+// MICROPHONE PERMISSION HELPER (mobile-friendly)
+// Lets the user explicitly grant mic access and gives step-by-step
+// instructions to re-enable it in phone browser settings if blocked.
+// ══════════════════════════════════════════════════════════════════════
+async function requestMic(prefix){
+  const status=document.getElementById(prefix+'-micstatus');
+  const set=h=>{ if(status)status.innerHTML=h; };
+  const insecure=(location.protocol!=='https:'&&location.hostname!=='localhost'&&location.hostname!=='127.0.0.1'&&location.protocol!=='file:');
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    set('⚠ This page can\'t reach the microphone. On a phone, open the app over <b>https://</b> in Chrome (Android) or Safari (iOS) — a plain <code>http://</code> link blocks the mic.');
+    return;
+  }
+  set('Requesting access…');
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    stream.getTracks().forEach(t=>t.stop());
+    set('✅ Microphone enabled. Hold the mic button and speak.');
+    const row=document.getElementById(prefix+'-micperm');
+    if(row)setTimeout(()=>{row.style.display='none';},2500);
+  }catch(err){
+    const n=err&&err.name;
+    if(n==='NotAllowedError'||n==='SecurityError'||n==='PermissionDeniedError'){
+      set('❌ The microphone is blocked. To allow it:<br>'+
+          '<b>Chrome (Android):</b> tap the 🔒/ⓘ icon to the left of the address bar → <b>Permissions</b> → <b>Microphone</b> → <b>Allow</b>, then reload.<br>'+
+          '<b>Safari (iOS):</b> tap <b>aA</b> in the address bar → <b>Website Settings</b> → <b>Microphone</b> → <b>Allow</b>, then reload.'+
+          (insecure?'<br>⚠ The page must also be opened over <b>https://</b> for the mic to work on a phone.':''));
+    } else if(n==='NotFoundError'||n==='DevicesNotFoundError'){
+      set('❌ No microphone was found on this device.');
+    } else {
+      set('❌ Could not enable the mic ('+(n||'unknown')+'). Try reloading the page.');
+    }
+  }
+}
+
+// Shown when a coach opens: reveals the Enable-Mic helper unless already granted.
+async function micPermCheck(prefix){
+  const row=document.getElementById(prefix+'-micperm');
+  const status=document.getElementById(prefix+'-micstatus');
+  if(!row)return;
+  row.style.display='block';
+  if(status)status.innerHTML='Tap once to allow microphone access, then hold the mic button to speak.';
+  if(navigator.permissions&&navigator.permissions.query){
+    try{
+      const p=await navigator.permissions.query({name:'microphone'});
+      if(p.state==='granted'){ row.style.display='none'; return; }
+      if(p.state==='denied'&&status){
+        status.innerHTML='❌ Microphone is currently blocked for this page — tap below for steps to re-enable it.';
+      }
+    }catch(e){/* Safari/iOS doesn't support querying 'microphone' — keep default hint */}
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// VOICE COACH — Spanish + Accent modes
+// Model: gemini-1.5-flash (confirmed free: 15 RPM, 1500 req/day)
+// Voice I/O: Web Speech API — works in Electron (Chromium), Chrome Android
+//
+// HONEST NOTE ON PRONUNCIATION ANALYSIS:
+// The Web Speech API converts your audio to TEXT before Gemini sees it.
+// Gemini reads words, not audio waveforms — it cannot detect the exact
+// phoneme you produced. What it CAN do:
+//   (a) Spot transcription clues (STT writes "de" if you said "de" not "the")
+//   (b) Apply known UAE/South-Asian speaker patterns to give targeted drills
+//   (c) Give you exact mouth/tongue cues so you can self-correct
+// This is like having a coach who hears a rough recording — useful, not perfect.
+// ══════════════════════════════════════════════════════════════════════
+
+// ── Key 2 (memory-only, never persisted) ─────────────────────────────
+let geminiKey2 = '';
+function saveKey2(){
+  const v=document.getElementById('key2-input').value.trim();
+  geminiKey2=v;
+  const m=document.getElementById('key2-saved');
+  m.style.display='inline';setTimeout(()=>m.style.display='none',2500);
+}
+
+// ── Dual-key fallback API wrapper (gemini-1.5-flash, confirmed free) ─
+async function callGeminiWithFallback(requestBody){
+  const keys=[(GEMINI_KEY||S.geminiKey||'').trim(),geminiKey2.trim()].filter(Boolean);
+  if(!keys.length) throw new Error('no-key');
+  for(const key of keys){
+    try{
+      const response=await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,
+        {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(requestBody)}
+      );
+      if(response.ok) return await response.json();
+    }catch(e){
+      if(keys.indexOf(key)===keys.length-1) throw e;
+    }
+  }
+  throw new Error('All keys failed');
+}
+
+// ── TTS (Web Speech API) ──────────────────────────────────────────────
+function vcGetVoice(lang){
+  const voices=window.speechSynthesis?window.speechSynthesis.getVoices():[];
+  if(lang==='es'){
+    return voices.find(v=>v.lang==='es-US')
+        ||voices.find(v=>v.lang==='es-MX')
+        ||voices.find(v=>v.lang.startsWith('es'))
+        ||null;
+  }
+  return voices.find(v=>v.name==='Google US English')
+      ||voices.find(v=>v.name==='Samantha')
+      ||voices.find(v=>v.lang==='en-US'&&v.name.includes('US'))
+      ||voices.find(v=>v.lang==='en-US')
+      ||voices.find(v=>v.lang.startsWith('en'))
+      ||null;
+}
+function vcSpeak(text,lang='en'){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt=new SpeechSynthesisUtterance(text);
+  utt.lang=lang==='es'?'es-US':'en-US';
+  utt.rate=lang==='es'?0.85:0.9;
+  const voice=vcGetVoice(lang);
+  if(voice) utt.voice=voice;
+  window.speechSynthesis.speak(utt);
+}
+if(window.speechSynthesis){
+  window.speechSynthesis.onvoiceschanged=()=>{}; // trigger voice load
+}
+
+// ── Shared helpers ────────────────────────────────────────────────────
+function vcScrollBody(id){const el=document.getElementById(id);if(el)el.scrollTop=el.scrollHeight;}
+
+// ── Shared audio capture (MediaRecorder → Gemini audio) ───────────────
+// Works inside an Android WebView APK once the mic is granted natively,
+// unlike webkitSpeechRecognition which is unavailable in a plain WebView.
+let vcStream=null;                         // cached mic stream (granted once, reused)
+async function vcGetStream(){
+  if(vcStream&&vcStream.active)return vcStream;
+  vcStream=await navigator.mediaDevices.getUserMedia({audio:true});
+  return vcStream;
+}
+function vcPickMime(){
+  // Prefer containers Gemini documents (ogg); most Chromium WebViews only do webm.
+  const c=['audio/ogg;codecs=opus','audio/webm;codecs=opus','audio/webm','audio/mp4'];
+  for(const m of c){ try{ if(window.MediaRecorder&&MediaRecorder.isTypeSupported(m))return m; }catch(e){} }
+  return '';
+}
+function vcBlobToB64(blob){
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onloadend=()=>res(((r.result||'')+'').split(',')[1]||'');
+    r.onerror=rej;
+    r.readAsDataURL(blob);
+  });
+}
+function vcMicBlocked(prefix,tr){
+  if(tr)tr.textContent='Microphone access denied — tap “Enable Microphone” below';
+  const row=document.getElementById(prefix+'-micperm');if(row)row.style.display='block';
+  const st=document.getElementById(prefix+'-micstatus');if(st)st.innerHTML='❌ Microphone is blocked. Tap “Enable Microphone” for steps to allow it.';
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SPANISH COACH
+// ══════════════════════════════════════════════════════════════════════
+const SC_PROMPT=`You are teaching Spanish from absolute zero to a complete beginner.
+The student speaks English fluently and knows Hindi/Gujarati/Arabic basics.
+They have ZERO Spanish knowledge — do not assume any prior vocabulary.
+
+INPUT FORMAT: Each turn you receive the student's spoken AUDIO. Begin EVERY reply with exactly one line:
+HEARD: <transcribe exactly what the student said — keep it short; if it's unclear, write your best guess>
+Then put your teaching response on the lines that follow. Use the word "HEARD" ONLY on that first line.
+Because you can hear the audio, judge their Spanish pronunciation directly and give a quick spoken-accuracy note when relevant.
+
+YOUR TEACHING STYLE:
+- Always communicate in English first, then introduce Spanish
+- Each exchange teaches at most 2-3 new words max — do not overwhelm
+- Pattern: "The Spanish word for [thing] is: ESPAÑOL: [word]. Say it with me."
+  Use ESPAÑOL: before any Spanish word/phrase so it gets pronounced by the Spanish voice.
+- After they attempt, respond:
+  ✓ "Great attempt!" → move forward
+  ✗ "Almost — it sounds like [correct pronunciation guide]. Try once more: ESPAÑOL: [word]"
+- Build sentences only from vocabulary already taught in this session
+- NEVER use Spanish words you have not explicitly taught yet
+
+CURRICULUM (follow this order strictly, one lesson per session):
+Session 1 — Greetings: hola, adiós, buenos días, buenas noches, ¿cómo estás?, bien, gracias
+Session 2 — Introductions: me llamo [name], soy de [place], tengo [number] años, mucho gusto
+Session 3 — Numbers 1-10: uno dos tres cuatro cinco seis siete ocho nueve diez
+Session 4 — Numbers 11-20 + telling age: ¿cuántos años tienes?, tengo 18 años
+Session 5 — Family: familia, madre, padre, hermano, hermana, ¿tienes hermanos?
+Session 6 — Food & drink: agua, comida, quiero, necesito, hambre, sed, por favor
+Session 7 — Places & directions: ¿dónde está?, aquí, allí, derecha, izquierda, recto
+Session 8 — Daily life: ¿qué haces?, trabajo, estudio, vivo en, me gusta
+Track which session you are on from the conversation history.
+
+WHEN THE STUDENT SPEAKS SPANISH (even badly):
+- Celebrate the attempt: "¡Muy bien!" (great!)
+- If wrong: gently correct ONE error only, never multiple at once
+- Repeat the correct version: ESPAÑOL: [correct phrase]
+
+WHEN THEY SPEAK ENGLISH: Answer briefly, then redirect to practice.
+
+FORMAT of your response:
+[English explanation and teaching]
+ESPAÑOL: [Spanish word or phrase for them to repeat — always include this for any new Spanish word]
+[English instruction: "Now say it back to me" or similar]
+[Note: correction if needed — one short line only]`;
+
+
+let scHistory=[];
+let scExchanges=0;
+let scWordsHeard=0;
+let scSession=1;
+let scListening=false;   // true while recording
+let scRec=null;          // MediaRecorder
+let scChunks=[];         // recorded audio chunks
+let scMime='audio/webm'; // chosen recording MIME
+let scAbort=false;       // true → discard recording instead of sending
+let scStarted=false;
+
+function scAddMsg(text,cls){
+  const body=document.getElementById('sc-body');
+  if(!body)return;
+  // Remove ESPAÑOL: markers from displayed text (we handle them via TTS)
+  const display=text.replace(/ESPAÑOL:\s*/g,'').trim();
+  const d=document.createElement('div');
+  d.className='vc-msg '+cls;
+  d.textContent=display;
+  body.appendChild(d);
+  body.scrollTop=body.scrollHeight;
+}
+
+// Bilingual TTS — speaks English text in English, then ESPAÑOL: parts in Spanish
+function scSpeak(text){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const parts=text.split(/ESPAÑOL:\s*/);
+  // parts[0] = English intro, parts[1..] = Spanish words/phrases
+  const enText=parts[0].trim();
+  const esTexts=parts.slice(1).map(p=>{
+    // Each Spanish part ends at the first sentence boundary or newline
+    const m=p.match(/^([^\n.!?]+[.!?]?)/);
+    return m?m[1].trim():p.split('\n')[0].trim();
+  }).filter(Boolean);
+
+  if(!enText&&!esTexts.length)return;
+
+  function speakEs(idx){
+    if(idx>=esTexts.length)return;
+    const utt=new SpeechSynthesisUtterance(esTexts[idx]);
+    utt.lang='es-US';utt.rate=0.82;
+    const v=vcGetVoice('es');if(v)utt.voice=v;
+    utt.onend=()=>speakEs(idx+1);
+    window.speechSynthesis.speak(utt);
+  }
+
+  if(enText){
+    const utt=new SpeechSynthesisUtterance(enText);
+    utt.lang='en-US';utt.rate=0.9;
+    const v=vcGetVoice('en');if(v)utt.voice=v;
+    utt.onend=()=>speakEs(0);
+    window.speechSynthesis.speak(utt);
+  } else {
+    speakEs(0);
+  }
+}
+
+function scInit(){
+  scHistory=[];scExchanges=0;scWordsHeard=0;
+  const body=document.getElementById('sc-body');
+  if(body)body.innerHTML='';
+  const el=id=>document.getElementById(id);
+  if(el('sc-exchanges'))el('sc-exchanges').textContent='0';
+  if(el('sc-words'))el('sc-words').textContent='0';
+  if(el('sc-level-lbl'))el('sc-level-lbl').textContent='Session '+scSession+' — Follow the coach!';
+  if(el('sc-transcript'))el('sc-transcript').textContent='';
+
+  const hasKey=(GEMINI_KEY||S.geminiKey||'').trim()||geminiKey2.trim();
+  if(!hasKey){
+    scAddMsg('⚠ No API key set. Go to Settings → add your Gemini API key, then return here.','sys');
+    return;
+  }
+  if(!window.MediaRecorder||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    scAddMsg('⚠ Audio recording isn\'t available here. Open the app in Chrome (Android) or the APK with mic permission.','sys');
+    return;
+  }
+  micPermCheck('sc');
+
+  // Opening in English — reassuring, structured, beginner-safe
+  const greeting=
+    "¡Bienvenido! Welcome to Spanish Coach! 👋\n\n"+
+    "I'll teach you everything from scratch — don't worry, you need zero Spanish right now.\n\n"+
+    "Here's how this works:\n"+
+    "① I teach you a Spanish word or phrase in English\n"+
+    "② I say it aloud so you can hear the pronunciation\n"+
+    "③ You hold the mic button, say it back, and release\n"+
+    "④ I'll tell you how it went and build from there\n\n"+
+    "Let's start with the most important word in Spanish:\n\n"+
+    "\"Hello\" in Spanish is: ESPAÑOL: Hola\n\n"+
+    "That's it — OH-lah. Hold the button and say: Hola";
+  scAddMsg(greeting,'ai');
+  scHistory.push({role:'model',parts:[{text:greeting}]});
+  scSpeak(greeting);
+}
+
+function scNewSession(){
+  scSession++;
+  if(document.getElementById('sc-session'))document.getElementById('sc-session').textContent=scSession;
+  if(document.getElementById('sc-level-lbl'))document.getElementById('sc-level-lbl').textContent='Session '+scSession+' — Follow the coach!';
+  scInit();
+}
+
+function scResetBtn(){
+  const btn=document.getElementById('sc-btn');
+  if(btn){btn.classList.remove('listening','loading');btn.textContent='🎤';}
+}
+
+async function scStartListen(e){
+  if(e){e.preventDefault();e.stopPropagation();}
+  if(scListening)return;
+  const tr=document.getElementById('sc-transcript');
+  if(!window.MediaRecorder||!navigator.mediaDevices){
+    scAddMsg('⚠ Audio recording isn\'t available here. Open the app in Chrome/Android or the APK.','sys');return;
+  }
+  window.speechSynthesis&&window.speechSynthesis.cancel();
+  let stream;
+  try{ stream=await vcGetStream(); }
+  catch(err){ vcMicBlocked('sc',tr); return; }
+  scListening=true;scAbort=false;scChunks=[];
+  const mime=vcPickMime();
+  scMime=(mime||'audio/webm').split(';')[0];
+  try{ scRec=new MediaRecorder(stream,mime?{mimeType:mime}:undefined); }
+  catch(ex){ scListening=false;scRec=null;scResetBtn();return; }
+  scRec.ondataavailable=ev=>{ if(ev.data&&ev.data.size>0)scChunks.push(ev.data); };
+  scRec.onstop=()=>{ const blob=new Blob(scChunks,{type:scMime}); if(!scAbort)scSendAudio(blob); };
+  const btn=document.getElementById('sc-btn');
+  if(btn){btn.classList.add('listening');btn.textContent='🔴';}
+  const hint=document.getElementById('sc-hint');
+  if(hint)hint.textContent='Recording... release when done';
+  if(tr)tr.textContent='Listening 🎙';
+  try{ scRec.start(); }catch(ex){ scListening=false;scRec=null;scResetBtn(); }
+}
+
+function scStopListen(e){
+  if(e){e.preventDefault();e.stopPropagation();}
+  if(!scListening)return;
+  scListening=false;
+  scResetBtn();
+  if(scRec){try{scRec.stop();}catch(ex){}}
+}
+
+// Stop recording WITHOUT sending (used when navigating away)
+function scAbortListen(){
+  scAbort=true;scListening=false;
+  if(scRec){try{scRec.stop();}catch(ex){}scRec=null;}
+  scResetBtn();
+}
+
+async function scSendAudio(blob){
+  const hasKey=(GEMINI_KEY||S.geminiKey||'').trim()||geminiKey2.trim();
+  if(!hasKey){scAddMsg('Add a Gemini API key in Settings to use the voice coach.','sys');return;}
+  const el=id=>document.getElementById(id);
+  const tr=el('sc-transcript');
+  if(!blob||blob.size<1400){ if(tr)tr.textContent='Didn\'t catch that — hold the button and speak.'; return; }
+  const btn=el('sc-btn');
+  if(btn){btn.classList.add('loading');btn.textContent='⏳';}
+  const hint=el('sc-hint');
+  if(hint)hint.textContent='Coach is listening...';
+  let b64;
+  try{ b64=await vcBlobToB64(blob); }
+  catch(e){ scResetBtn(); if(hint)hint.textContent='Hold to speak · Release to send'; return; }
+  // Audio turn — carries the recording; compacted to text once we have the transcript
+  const userTurn={role:'user',parts:[
+    {text:'The student just spoke (audio attached). Transcribe it for the HEARD line, then reply per your rules.'},
+    {inline_data:{mime_type:scMime,data:b64}}
+  ]};
+  scHistory.push(userTurn);
+  try{
+    const data=await callGeminiWithFallback({
+      system_instruction:{parts:[{text:SC_PROMPT}]},
+      contents:scHistory,
+      generationConfig:{maxOutputTokens:260,temperature:0.8}
+    });
+    const reply=data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if(!reply)throw new Error('empty');
+    const heardM=reply.match(/^\s*HEARD:\s*(.+)$/im);
+    const heard=heardM?heardM[1].trim():'';
+    // Replace the heavy audio turn with light text so we never resend audio
+    userTurn.parts=[{text:heard?('(spoke) '+heard):'(student spoke)'}];
+    scHistory.push({role:'model',parts:[{text:reply}]});
+    if(heard){ scAddMsg(heard,'user'); scWordsHeard+=heard.split(/\s+/).filter(Boolean).length; }
+    scExchanges++;
+    if(el('sc-exchanges'))el('sc-exchanges').textContent=scExchanges;
+    if(el('sc-words'))el('sc-words').textContent=scWordsHeard;
+    if(tr)tr.textContent='';
+    // Body = reply minus the HEARD line; split Note: corrections from teaching body
+    const lines=reply.split('\n').filter(l=>!/^\s*HEARD:/i.test(l));
+    const noteLines=lines.filter(l=>l.trim().toLowerCase().startsWith('note:'));
+    const mainLines=lines.filter(l=>!l.trim().toLowerCase().startsWith('note:')).join('\n').trim();
+    if(mainLines){scAddMsg(mainLines,'ai');scSpeak(mainLines);}
+    noteLines.forEach(n=>{if(n.trim())scAddMsg(n.trim(),'note');});
+    if(scExchanges>0&&scExchanges%10===0)scShowSummary();
+  }catch(err){
+    scHistory.pop(); // drop the failed audio turn so history stays clean
+    const msg=err.message==='no-key'?'Add API key in Settings.':'Error — check connection and API key in Settings.';
+    scAddMsg(msg,'sys');
+  }
+  scResetBtn();
+  if(hint)hint.textContent='Hold to speak · Release to send';
+}
+
+async function scShowSummary(){
+  const q=`The student just completed ${scExchanges} Spanish exchanges. Give a brief SESSION SUMMARY:\nTOP 3 IMPROVEMENTS: (specific things done well)\nWORK ON: (2 specific things to improve)\nUnder 100 words. Warm and encouraging.`;
+  try{
+    const data=await callGeminiWithFallback({
+      system_instruction:{parts:[{text:SC_PROMPT}]},
+      contents:[...scHistory,{role:'user',parts:[{text:q}]}],
+      generationConfig:{maxOutputTokens:180}
+    });
+    const summary=data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if(!summary)return;
+    const body=document.getElementById('sc-body');
+    if(!body)return;
+    const d=document.createElement('div');
+    d.className='vc-summary';
+    d.innerHTML='<h3>Session '+scSession+' Summary</h3>'+
+      summary.split('\n').map(l=>l.trim()?`<div class="vc-summary-line">${l}</div>`:'').join('');
+    body.appendChild(d);body.scrollTop=body.scrollHeight;
+  }catch(e){}
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// ACCENT COACH — 12-sound curriculum, score-based progression
+// ══════════════════════════════════════════════════════════════════════
+const AC_PROMPT=`You are a General American (Midwest neutral) accent coach.
+The student is UAE-raised with Indian phonetic influence. They speak into a microphone
+and you receive their ACTUAL SPOKEN AUDIO each turn.
+
+YOU CAN HEAR THE AUDIO — judge their real pronunciation, not a guess:
+- Listen for the specific target phoneme and whether they truly produced it
+  (e.g. real /θ/ vs substituted /t/ or /d/; /v/ vs /w/; /z/ vs /s/; vowel length;
+   final-consonant clarity; word stress and rhythm).
+- Base SCORE and ISSUE on what you ACTUALLY HEAR them do with their mouth.
+- Name the precise articulation that went wrong (tongue/lip/jaw position).
+- If the audio is unclear or too short to judge, say so and ask them to repeat.
+
+RESPONSE FORMAT (use EXACTLY this, every single time):
+HEARD: [transcribe exactly what they said — short]
+SCORE: X/10
+ISSUE: [one specific phoneme issue — be very specific about what muscle/position went wrong]
+REPEAT: [a short drill sentence of 6-10 words targeting exactly that sound]
+TIP: [one sentence: exact mouth/tongue/lip position, using simple body language]
+
+[Then ONE natural English sentence to continue the conversation and keep them talking]
+
+SCORING GUIDE:
+3-4: Very strong accent feature, pattern well-known for this speaker background
+5-6: Noticeable but understandable — getting there
+7-8: Good attempt, minor issues only
+9-10: Genuine progress from earlier — only award when you see real improvement across turns
+
+CURRENT SOUND CONTEXT: The current focus sound will be provided in each message. Focus ALL feedback on that sound specifically, even if you detect other issues.`;
+
+// 12-sound curriculum in pedagogical order
+// Advancement: need AVERAGE of last 3 scores ≥ 7.5 to unlock next sound
+const AC_SOUNDS=[
+  // ── LEVEL 1: The two most critical sounds for UAE speakers ──
+  {
+    id:0, level:1,
+    sound:'TH — Unvoiced',
+    shortName:'th (think/three)',
+    desc:'tongue tip lightly between teeth, blow air — like "sss" but with your tongue sticking out slightly',
+    opener:'Say this: "I think three things are true — thank you for thinking that through."',
+    why:'UAE speakers often replace with T or F (tink/fink). This one sound instantly changes how native you sound.'
+  },
+  {
+    id:1, level:1,
+    sound:'TH — Voiced',
+    shortName:'th (the/this/they)',
+    desc:'same tongue position as unvoiced TH but add your voice — feel your throat vibrate',
+    opener:'Say this: "The other day they said this together without thinking."',
+    why:'UAE speakers often say D instead (da/dis/dey). Extremely common — worth drilling hard.'
+  },
+  // ── LEVEL 2: The American R ──
+  {
+    id:2, level:2,
+    sound:'American R',
+    shortName:'American R',
+    desc:'curl your tongue tip BACK toward the roof — do not tap, roll, or trill it. Lips slightly round.',
+    opener:'Say this: "Remember, her further career requires real work every year."',
+    why:'Indian/Arabic R is a tap or roll. American R is held — tongue curls back and stays.'
+  },
+  // ── LEVEL 3: V vs W ──
+  {
+    id:3, level:3,
+    sound:'V vs W Distinction',
+    shortName:'V vs W',
+    desc:'V: bite your LOWER LIP with your upper teeth. W: round your lips — NO teeth at all.',
+    opener:'Say this: "Very well, we have a very vivid view of the wide valley."',
+    why:'South Asian speakers often use W for both (wery/wiew). Listen to the bite vs the round.'
+  },
+  // ── LEVEL 4: Vowel precision ──
+  {
+    id:4, level:4,
+    sound:'æ Vowel (cat, bad, man)',
+    shortName:'æ vowel',
+    desc:'drop your jaw WIDE open, tongue flat on the floor of your mouth — further than feels natural',
+    opener:'Say this: "That black cat sat back and laughed — that\'s actually a bad habit."',
+    why:'UAE speakers say "a" (like in father) or "eh" (too short). American æ needs a very wide open jaw.'
+  },
+  {
+    id:5, level:4,
+    sound:'ɪ vs iː  (bit vs beat)',
+    shortName:'ɪ vs iː',
+    desc:'Short ɪ: relax everything, quick. Long iː: tense your tongue, spread your lips like a wide smile.',
+    opener:'Say this: "I still feel he\'s been sitting in it — did he eat it or just sit with it?"',
+    why:'Treating both as the same "ee" is very common. The short one needs a completely relaxed tongue.'
+  },
+  {
+    id:6, level:4,
+    sound:'Schwa ə (unstressed syllables)',
+    shortName:'Schwa ə',
+    desc:'completely relaxed mouth, center position, just breathe out and say "uh" — like a sigh',
+    opener:'Say this: "About a minute ago, the problem was a simple matter of support."',
+    why:'Arabic and Indian English over-pronounce unstressed syllables. Every unstressed syllable should collapse to uh.'
+  },
+  // ── LEVEL 5: Word-level prosody ──
+  {
+    id:7, level:5,
+    sound:'Word Stress',
+    shortName:'Word stress',
+    desc:'ONE syllable per word gets: louder + longer + higher pitch. All others get quieter and shorter.',
+    opener:'Say this: "I\'m having a conversation about important information at the university."',
+    why:'Equal stress on all syllables sounds robotic and foreign. One stressed peak per word.'
+  },
+  {
+    id:8, level:5,
+    sound:'Final Consonants',
+    shortName:'Final consonants',
+    desc:'English ends words fully — "stopped" ends in a clear T, "loved" ends in a D. Don\'t clip the ending.',
+    opener:'Say this: "I stopped, looked back, grabbed my bag, and walked straight out fast."',
+    why:'Arabic and Hindi phonology often drops or softens word-final consonants. Every ending needs to land.'
+  },
+  // ── LEVEL 6: Sentence-level rhythm ──
+  {
+    id:9, level:6,
+    sound:'Sentence Rhythm and Stress',
+    shortName:'Sentence rhythm',
+    desc:'Content words (nouns, verbs, adjectives) get stress. Function words (the, a, is, to) get swallowed.',
+    opener:'Say this: "I was going to the store but I didn\'t have the time to get it done."',
+    why:'Every-word-equal stress sounds robotic. Natural English has a beat — stressed words pop out.'
+  },
+  {
+    id:10, level:6,
+    sound:'Connected Speech (gonna/wanna/kinda)',
+    shortName:'Connected speech',
+    desc:'Link words smoothly — "going to" → "gonna", "want to" → "wanna", "out of" → "outta"',
+    opener:'Say this: "What do you want to do when you get out of here? I\'m going to head over there."',
+    why:'Pronouncing every word in full isolation sounds formal and unnatural in American English.'
+  },
+  // ── LEVEL 7: Intonation ──
+  {
+    id:11, level:7,
+    sound:'Intonation Patterns',
+    shortName:'Intonation',
+    desc:'Yes/no questions: pitch RISES at end. Statements: pitch FALLS. Lists: rise on each item, fall on last.',
+    opener:'Say this as a genuine question with rising pitch: "Are you actually coming tomorrow?"',
+    why:'Flat monotone — no pitch variation — makes you sound uncertain, bored, or unclear about meaning.'
+  },
+];
+
+const AC_LEVEL_NAMES={1:'Foundation',2:'Foundation',3:'Foundation',4:'Vowels',5:'Prosody',6:'Rhythm',7:'Advanced'};
+
+let acHistory=[];
+let acExchanges=0;
+let acSoundScores={}; // keyed by sound id → array of last 5 scores
+let acBestScore=0;
+let acSoundIdx=0;     // current position in AC_SOUNDS (0-11)
+let acTurnsOnSound=0; // how many turns on the current sound
+let acListening=false;   // true while recording
+let acRec=null;          // MediaRecorder
+let acChunks=[];         // recorded audio chunks
+let acMime='audio/webm'; // chosen recording MIME
+let acAbort=false;       // true → discard recording instead of sending
+let acStarted=false;
+
+// Advancement threshold: average of last 3 scores on current sound must be ≥ 7.5
+const AC_ADVANCE_THRESHOLD=7.5;
+const AC_ADVANCE_MIN_TURNS=3; // must have at least 3 turns before advancing
+
+function acAddMsg(text,cls){
+  const body=document.getElementById('ac-body');
+  if(!body)return;
+  const d=document.createElement('div');
+  d.className='vc-msg '+cls;
+  d.textContent=text;
+  body.appendChild(d);
+  body.scrollTop=body.scrollHeight;
+}
+
+function acUpdateHeader(){
+  const sound=AC_SOUNDS[acSoundIdx];
+  const el=id=>document.getElementById(id);
+  if(el('ac-focus-name'))el('ac-focus-name').textContent=sound.shortName;
+  // Show level badge in subtitle
+  const levelName=AC_LEVEL_NAMES[sound.level]||'Level '+sound.level;
+  const progress=(acSoundIdx+1)+'/'+AC_SOUNDS.length;
+  const el2=document.querySelector('#page-accent-coach .vc-sub');
+  if(el2)el2.innerHTML='Sound '+progress+' · Level: <strong style="color:var(--accent)">'+levelName+'</strong>';
+}
+
+function acInit(){
+  acHistory=[];acExchanges=0;acSoundScores={};acBestScore=0;acTurnsOnSound=0;
+  // acSoundIdx intentionally NOT reset — persists between sessions within the same run
+  const body=document.getElementById('ac-body');
+  if(body)body.innerHTML='';
+  const el=id=>document.getElementById(id);
+  if(el('ac-feedback'))el('ac-feedback').style.display='none';
+  if(el('ac-exchanges'))el('ac-exchanges').textContent='0';
+  if(el('ac-score-disp'))el('ac-score-disp').textContent='—';
+  if(el('ac-best'))el('ac-best').textContent='—';
+  if(el('ac-score-num'))el('ac-score-num').textContent='—';
+  if(el('ac-score-fill'))el('ac-score-fill').style.width='0%';
+  if(el('ac-repeat'))el('ac-repeat').style.display='none';
+  if(el('ac-transcript'))el('ac-transcript').textContent='';
+  acUpdateHeader();
+  const hasKey=(GEMINI_KEY||S.geminiKey||'').trim()||geminiKey2.trim();
+  if(!hasKey){acAddMsg('⚠ No API key set. Go to Settings → Gemini API Key.','sys');return;}
+  if(!window.MediaRecorder||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    acAddMsg('⚠ Audio recording isn\'t available here. Open the app in Chrome (Android) or the APK with mic permission.','sys');return;
+  }
+  micPermCheck('ac');
+  const sound=AC_SOUNDS[acSoundIdx];
+  const allDone=acSoundIdx>=AC_SOUNDS.length;
+  if(allDone){
+    const done='🏆 You have completed all 12 sounds! Your General American accent has all the foundations. Keep practising natural conversation to solidify everything.';
+    acAddMsg(done,'sys');
+    vcSpeak(done,'en');
+    return;
+  }
+  const intro=
+    'Sound '+(acSoundIdx+1)+' of '+AC_SOUNDS.length+': '+sound.sound+'\n\n'+
+    'Why this matters: '+sound.why+'\n\n'+
+    'How to do it: '+sound.desc+'\n\n'+
+    'Let\'s test it. Hold the mic and say:\n'+sound.opener+'\n\n'+
+    '(You need to score 7.5+ average across 3 turns to unlock the next sound.)';
+  acAddMsg(intro,'ai');
+  acHistory.push({role:'model',parts:[{text:intro}]});
+  vcSpeak(intro,'en');
+}
+
+function acNewSession(){
+  // Reset to start from sound 0 (full restart)
+  acSoundIdx=0;
+  acTurnsOnSound=0;
+  acInit();
+}
+
+function acCheckAdvancement(){
+  const scores=acSoundScores[acSoundIdx]||[];
+  if(scores.length<AC_ADVANCE_MIN_TURNS||acTurnsOnSound<AC_ADVANCE_MIN_TURNS)return false;
+  const last3=scores.slice(-3);
+  const avg=last3.reduce((a,b)=>a+b,0)/last3.length;
+  return avg>=AC_ADVANCE_THRESHOLD;
+}
+
+function acResetBtn(){
+  const btn=document.getElementById('ac-btn');
+  if(btn){btn.classList.remove('listening','loading');btn.textContent='🎤';}
+}
+
+async function acStartListen(e){
+  if(e){e.preventDefault();e.stopPropagation();}
+  if(acListening)return;
+  const tr=document.getElementById('ac-transcript');
+  if(!window.MediaRecorder||!navigator.mediaDevices){
+    acAddMsg('⚠ Audio recording isn\'t available here. Open the app in Chrome/Android or the APK.','sys');return;
+  }
+  window.speechSynthesis&&window.speechSynthesis.cancel();
+  let stream;
+  try{ stream=await vcGetStream(); }
+  catch(err){ vcMicBlocked('ac',tr); return; }
+  acListening=true;acAbort=false;acChunks=[];
+  const mime=vcPickMime();
+  acMime=(mime||'audio/webm').split(';')[0];
+  try{ acRec=new MediaRecorder(stream,mime?{mimeType:mime}:undefined); }
+  catch(ex){ acListening=false;acRec=null;acResetBtn();return; }
+  acRec.ondataavailable=ev=>{ if(ev.data&&ev.data.size>0)acChunks.push(ev.data); };
+  acRec.onstop=()=>{ const blob=new Blob(acChunks,{type:acMime}); if(!acAbort)acSendAudio(blob); };
+  const btn=document.getElementById('ac-btn');
+  if(btn){btn.classList.add('listening');btn.textContent='🔴';}
+  const hint=document.getElementById('ac-hint');
+  if(hint)hint.textContent='Recording... release when done';
+  if(tr)tr.textContent='Listening 🎙';
+  try{ acRec.start(); }catch(ex){ acListening=false;acRec=null;acResetBtn(); }
+}
+
+function acStopListen(e){
+  if(e){e.preventDefault();e.stopPropagation();}
+  if(!acListening)return;
+  acListening=false;
+  acResetBtn();
+  if(acRec){try{acRec.stop();}catch(ex){}}
+}
+
+// Stop recording WITHOUT sending (used when navigating away)
+function acAbortListen(){
+  acAbort=true;acListening=false;
+  if(acRec){try{acRec.stop();}catch(ex){}acRec=null;}
+  acResetBtn();
+}
+
+async function acSendAudio(blob){
+  const hasKey=(GEMINI_KEY||S.geminiKey||'').trim()||geminiKey2.trim();
+  if(!hasKey){acAddMsg('Add a Gemini API key in Settings.','sys');return;}
+  const el=id=>document.getElementById(id);
+  const tr=el('ac-transcript');
+  if(!blob||blob.size<1400){ if(tr)tr.textContent='Didn\'t catch that — hold the button and speak.'; return; }
+  const btn=el('ac-btn');
+  if(btn){btn.classList.add('loading');btn.textContent='⏳';}
+  const hint=el('ac-hint');
+  if(hint)hint.textContent='Analysing your accent...';
+  let b64;
+  try{ b64=await vcBlobToB64(blob); }
+  catch(e){ acResetBtn(); if(hint)hint.textContent='Hold to speak · Release to send'; return; }
+  const sound=AC_SOUNDS[acSoundIdx];
+  acExchanges++;acTurnsOnSound++;
+  if(el('ac-exchanges'))el('ac-exchanges').textContent=acExchanges;
+  const ctx=
+    `The student just spoke (audio attached). Listen to their actual pronunciation.\n`+
+    `CURRENT FOCUS SOUND: ${sound.sound}\n`+
+    `Common error pattern for this speaker: ${sound.why}\n`+
+    `Evaluate specifically for this sound from the AUDIO. Turns on this sound so far: ${acTurnsOnSound}.`;
+  const userTurn={role:'user',parts:[
+    {text:ctx},
+    {inline_data:{mime_type:acMime,data:b64}}
+  ]};
+  acHistory.push(userTurn);
+  try{
+    const data=await callGeminiWithFallback({
+      system_instruction:{parts:[{text:AC_PROMPT}]},
+      contents:acHistory,
+      generationConfig:{maxOutputTokens:260,temperature:0.55}
+    });
+    const reply=data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if(!reply)throw new Error('empty');
+    // Show what was heard, and compact the audio turn to text so we never resend audio
+    const heardM=reply.match(/^\s*HEARD:\s*(.+)$/im);
+    const heard=heardM?heardM[1].trim():'';
+    userTurn.parts=[{text:heard?('(spoke) '+heard):'(student spoke)'}];
+    if(heard)acAddMsg(heard,'user');
+    if(el('ac-transcript'))el('ac-transcript').textContent='';
+    acHistory.push({role:'model',parts:[{text:reply}]});
+    // Parse structured response
+    const scoreM=reply.match(/SCORE:\s*(\d+(?:\.\d+)?)/i);
+    const issueM=reply.match(/ISSUE:\s*(.+?)(?=REPEAT:|TIP:|$)/is);
+    const repeatM=reply.match(/REPEAT:\s*(.+?)(?=TIP:|SCORE:|$)/is);
+    const tipM=reply.match(/TIP:\s*(.+?)(?=SCORE:|ISSUE:|$)/is);
+    const score=scoreM?parseFloat(scoreM[1]):null;
+    const issue=issueM?issueM[1].replace(/\n/g,' ').trim():'';
+    const repeat=repeatM?repeatM[1].replace(/\n/g,' ').trim():'';
+    const tip=tipM?tipM[1].replace(/\n/g,' ').trim():'';
+    const contLine=reply.split('\n')
+      .filter(l=>!l.match(/^(HEARD:|SCORE:|ISSUE:|REPEAT:|TIP:)/i)&&l.trim().length>12)
+      .join(' ').trim();
+    if(contLine){acAddMsg(contLine,'ai');vcSpeak(contLine,'en');}
+    // Update feedback panel
+    const fb=el('ac-feedback');
+    if(fb)fb.style.display='block';
+    if(score!==null){
+      if(!acSoundScores[acSoundIdx])acSoundScores[acSoundIdx]=[];
+      acSoundScores[acSoundIdx].push(score);
+      if(score>acBestScore){acBestScore=score;if(el('ac-best'))el('ac-best').textContent=score+'/10';}
+      if(el('ac-score-num'))el('ac-score-num').textContent=Math.round(score)+'/10';
+      if(el('ac-score-fill'))el('ac-score-fill').style.width=(score*10)+'%';
+      if(el('ac-score-disp'))el('ac-score-disp').textContent=Math.round(score)+'/10';
+    }
+    if(issue&&el('ac-issue'))el('ac-issue').textContent='⚠ '+issue;
+    if(repeat){
+      const rEl=el('ac-repeat');
+      if(rEl){rEl.textContent='🗣 Drill: '+repeat;rEl.style.display='block';}
+    }
+    if(tip&&el('ac-tip'))el('ac-tip').textContent='💡 '+tip;
+    // ── Score-based advancement ──
+    if(score!==null&&acCheckAdvancement()){
+      const prevSound=AC_SOUNDS[acSoundIdx];
+      acSoundIdx++;
+      acTurnsOnSound=0;
+      acUpdateHeader();
+      if(acSoundIdx>=AC_SOUNDS.length){
+        const done='🏆 You\'ve mastered all 12 sounds! Your General American accent has a solid foundation. Keep practising with natural conversation.';
+        acAddMsg(done,'sys');vcSpeak(done,'en');
+      } else {
+        const nextSound=AC_SOUNDS[acSoundIdx];
+        const adv=
+          '✅ Sound unlocked! You averaged 7.5+ on "'+prevSound.shortName+'" — moving forward.\n\n'+
+          'NEXT: '+nextSound.sound+'\n'+nextSound.desc+'\n\n'+nextSound.opener;
+        acAddMsg(adv,'sys');vcSpeak(adv,'en');
+        acHistory=[];// Fresh history for new sound
+        acHistory.push({role:'model',parts:[{text:adv}]});
+      }
+    }
+    // Summary every 10 exchanges
+    if(acExchanges>0&&acExchanges%10===0)acShowSummary();
+  }catch(err){
+    if(acHistory.length&&acHistory[acHistory.length-1]===userTurn)acHistory.pop();
+    const msg=err.message==='no-key'?'Add API key in Settings.':'Error — check connection and API key.';
+    acAddMsg(msg,'sys');
+  }
+  acResetBtn();
+  if(hint)hint.textContent='Hold to speak · Release to send';
+}
+
+async function acShowSummary(){
+  const allScores=Object.values(acSoundScores).flat();
+  const avg=allScores.length?Math.round(allScores.reduce((a,b)=>a+b,0)/allScores.length):0;
+  const soundsUnlocked=acSoundIdx;
+  const sound=AC_SOUNDS[Math.min(acSoundIdx,AC_SOUNDS.length-1)];
+  const q=
+    `Stats: ${acExchanges} total turns, current sound "${sound.shortName}", `+
+    `avg score ${avg}/10, best ${acBestScore}/10, sounds unlocked: ${soundsUnlocked}/${AC_SOUNDS.length}.\n`+
+    `Give a SESSION SUMMARY in under 100 words:\n`+
+    `TOP 3 IMPROVEMENTS: (be specific about what got better)\n`+
+    `NEXT TARGET: (what to drill hardest before next session)`;
+  try{
+    const data=await callGeminiWithFallback({
+      system_instruction:{parts:[{text:AC_PROMPT}]},
+      contents:[...acHistory,{role:'user',parts:[{text:q}]}],
+      generationConfig:{maxOutputTokens:180}
+    });
+    const summary=data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if(!summary)return;
+    const body=document.getElementById('ac-body');
+    if(!body)return;
+    const d=document.createElement('div');
+    d.className='vc-summary';
+    d.innerHTML=
+      '<h3>Progress Check · '+soundsUnlocked+'/'+AC_SOUNDS.length+' sounds ✓</h3>'+
+      summary.split('\n').map(l=>l.trim()?`<div class="vc-summary-line">${l}</div>`:'').join('');
+    body.appendChild(d);body.scrollTop=body.scrollHeight;
+  }catch(e){}
+}
+
+// ── end voice coach ───────────────────────────────────────────────────
+
+loadS();vDay=todayNum();renderSchedule();updateSidebar();renderLearnModule();
+const sd2=document.getElementById('start-input');if(sd2)sd2.value=S.startDate||'';
+</script>
+</body>
+</html>

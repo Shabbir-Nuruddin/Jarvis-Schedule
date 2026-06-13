@@ -1,0 +1,181 @@
+# SETUP GUIDE — Shabbir's 30-Day Gauntlet
+# Read this top to bottom. Follow exactly. Takes 10 minutes total.
+
+═══════════════════════════════════════════════
+STEP 1 — PUT ALL FILES IN ONE FOLDER
+═══════════════════════════════════════════════
+
+Create a folder on your Desktop called: gauntlet
+
+Put ALL of these files inside it:
+  ✓ shabbir_30day_gauntlet.html
+  ✓ main.js
+  ✓ package.json
+  ✓ jarvis_guardian.py
+  ✓ SETUP_GUIDE.txt  (this file)
+
+
+═══════════════════════════════════════════════
+STEP 2 — INSTALL NODE.JS (one time only)
+═══════════════════════════════════════════════
+
+1. Go to: https://nodejs.org
+2. Download the LTS version (big green button)
+3. Install it — click Next on everything
+4. Restart your computer once after installing
+
+
+═══════════════════════════════════════════════
+STEP 3 — OPEN THE FOLDER IN VS CODE
+═══════════════════════════════════════════════
+
+1. Open VS Code
+2. Click: File → Open Folder
+3. Select your "gauntlet" folder
+4. Click "Open"
+
+
+═══════════════════════════════════════════════
+STEP 4 — INSTALL ELECTRON (one time only)
+═══════════════════════════════════════════════
+
+1. In VS Code, open the terminal:
+   Press Ctrl + ` (backtick key, top-left of keyboard)
+   OR go to: Terminal → New Terminal
+
+2. You should see: PS C:\...\gauntlet>
+   (or similar path ending in your folder name)
+
+3. Type this and press Enter:
+   npm install
+
+4. Wait for it to finish (30-60 seconds)
+   You'll see it downloading "electron"
+
+
+═══════════════════════════════════════════════
+STEP 5 — LAUNCH YOUR APP
+═══════════════════════════════════════════════
+
+In the same VS Code terminal, type:
+  npm start
+
+Your app opens in its own window. Done.
+
+To open it again later:
+  1. Open VS Code
+  2. Open terminal (Ctrl + `)
+  3. Type: npm start
+
+
+═══════════════════════════════════════════════
+STEP 6 — GET YOUR GEMINI API KEY (free)
+═══════════════════════════════════════════════
+
+1. Go to: https://aistudio.google.com/app/apikey
+2. Sign in with any Google account
+3. Click "Create API Key"
+4. Copy it (starts with AIza...)
+5. In your app → click Settings → paste key → Save
+
+This powers: news, AI coach, workouts, languages, Quran guide, lessons.
+Free tier: 1 million tokens/month — more than enough.
+
+
+═══════════════════════════════════════════════
+STEP 7 — JARVIS FOCUS GUARDIAN (optional but powerful)
+═══════════════════════════════════════════════
+
+This runs separately in a terminal while your app is open.
+Say "Jarvis" → it wakes up → you talk → it responds and acts.
+
+First, install Python packages (one time):
+
+  pip install SpeechRecognition pyaudio pyautogui google-generativeai pygetwindow win10toast
+
+  NOTE: If pyaudio fails on Windows, do this instead:
+    pip install pipwin
+    pipwin install pyaudio
+
+Then add your Gemini API key to the script:
+  1. Open jarvis_guardian.py in VS Code
+  2. Find line: GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+  3. Replace "" with your key in quotes: "AIzaYourKeyHere"
+  4. Save the file
+
+Then run it:
+  python jarvis_guardian.py
+
+Now you can say "Jarvis" at any time and it will:
+  - Tell you what you should be doing right now
+  - Motivate you (harshly, the way you like)
+  - Navigate you to the correct website for your current task
+  - Close distracting tabs and redirect you
+  - Answer any question like a tutor
+
+To stop Jarvis: press Ctrl+C in the terminal
+
+
+═══════════════════════════════════════════════
+PRIVACY — READ THIS
+═══════════════════════════════════════════════
+
+The HTML app:
+  - Saves data in your browser/Electron local storage (on your device ONLY)
+  - Calls Gemini only when you press a button
+  - No analytics. No tracking. No ads. Nothing.
+
+Jarvis guardian:
+  - Mic only samples 1-second chunks to detect the word "Jarvis"
+  - Audio is processed and immediately discarded — NEVER saved
+  - Window title monitoring is local only (no logging)
+  - The only data that leaves your machine: your spoken commands to Gemini
+
+You can read every line of both files in VS Code. Nothing is hidden.
+
+
+═══════════════════════════════════════════════
+ABOUT TETR COLLEGE OF BUSINESS
+═══════════════════════════════════════════════
+
+You're not going to a normal university. Here's what Tetr actually is:
+
+  - 7 countries across 4 years: India, Dubai, Singapore, 
+    Ghana, Argentina, Europe, USA
+  - No permanent campus — you travel and live in each country
+  - "Learn business by doing business" — you actually BUILD 
+    companies in each location
+  - First cohort launched 44 ventures generating $324,000 in revenue
+  - Students from 45+ countries, many turned down Warwick, 
+    King's College, Northeastern, etc.
+  - Affiliated with Cornell, NUS, IIT Delhi, Illinois Tech
+  - Founded by Pratham Mittal in 2022
+
+This means: you're not preparing for lectures. You're preparing
+to BUILD businesses in 7 different markets, with people from 
+45 countries, starting almost immediately. Your content creation
+experience and CFO.AI background are directly relevant from Day 1.
+
+
+═══════════════════════════════════════════════
+TROUBLESHOOTING
+═══════════════════════════════════════════════
+
+"npm is not recognized":
+  → Node.js isn't installed. Go back to Step 2.
+
+"Cannot find module 'electron'":
+  → Run npm install again in the right folder.
+
+"npm start opens nothing":
+  → Make sure shabbir_30day_gauntlet.html is in the SAME folder as main.js
+
+Jarvis: "No module named speech_recognition":
+  → Run: pip install SpeechRecognition
+
+Jarvis: pyaudio install fails:
+  → Run: pip install pipwin  then  pipwin install pyaudio
+
+App doesn't save my progress:
+  → This is a browser storage issue. Run via npm start (Electron), not 
+    by opening the HTML file directly in a browser.

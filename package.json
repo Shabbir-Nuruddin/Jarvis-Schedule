@@ -1,0 +1,12 @@
+{
+  "name": "shabbir-gauntlet",
+  "version": "1.0.0",
+  "description": "Shabbir's 30-Day Transformation App",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^28.3.3"
+  }
+}

@@ -1,0 +1,14 @@
+# Secrets
+config.json
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+
+# OS
+Thumbs.db
+.DS_Store
