@@ -9,6 +9,9 @@ __pycache__/
 # Node
 node_modules/
 
+# Local Claude config / dev-server launch config
+.claude/
+
 # OS
 Thumbs.db
 .DS_Store

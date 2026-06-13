@@ -74,6 +74,25 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .tag-social{background:rgba(232,121,160,0.12);color:var(--pink);}
 .tag-quran{background:rgba(167,139,250,0.12);color:var(--purple);}
 .tag-language{background:rgba(251,191,36,0.12);color:#fbbf24;}
+.tag-news{background:rgba(91,156,246,0.12);color:var(--blue);}
+.tag-build{background:rgba(62,207,142,0.12);color:var(--green);}
+.tag-content{background:rgba(232,121,160,0.12);color:var(--pink);}
+.tag-read{background:rgba(167,139,250,0.12);color:var(--purple);}
+.tag-break{background:rgba(120,200,255,0.12);color:#7cc6ff;}
+/* ── Focus Lock ───────────────────────────────────────────── */
+.lockbtn{margin-top:8px;background:rgba(232,197,71,0.10);border:1px solid rgba(232,197,71,0.35);color:var(--accent);font-size:11px;font-weight:600;padding:5px 11px;border-radius:7px;cursor:pointer;letter-spacing:0.3px;}
+.lockbtn:hover{background:rgba(232,197,71,0.20);}
+#lock-overlay{position:fixed;inset:0;z-index:2147483647;background:radial-gradient(circle at 50% 30%,#161616,#000);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;color:#f0ede8;font-family:inherit;}
+#lock-overlay.on{display:flex;}
+#lock-overlay.alarm{animation:lockflash 0.5s ease-in-out 6;}
+@keyframes lockflash{0%,100%{background:radial-gradient(circle at 50% 30%,#161616,#000);}50%{background:#5a0d0d;}}
+#lock-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#e8c547;font-weight:700;margin-bottom:10px;}
+#lock-task{font-size:23px;font-weight:600;max-width:560px;line-height:1.35;margin-bottom:22px;}
+#lock-count{font-family:'DM Mono',monospace;font-size:64px;font-weight:700;color:#fff;letter-spacing:2px;line-height:1;}
+#lock-sub{font-size:13px;color:#888;margin-top:18px;max-width:480px;line-height:1.6;}
+#lock-escapes{font-size:13px;color:var(--red);margin-top:14px;min-height:18px;font-weight:600;}
+#lock-unlock{margin-top:26px;background:var(--green);border:none;color:#04140c;font-weight:700;font-size:14px;padding:11px 26px;border-radius:9px;cursor:pointer;display:none;}
+#lock-panic{margin-top:14px;background:none;border:none;color:#444;font-size:11px;cursor:pointer;text-decoration:underline;}
 .tb-title{font-size:14px;font-weight:500;margin-bottom:3px;}
 .tb-desc{font-size:12.5px;color:var(--muted);line-height:1.55;}
 .chk{width:23px;height:23px;border-radius:50%;border:1.5px solid var(--border2);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:2px;transition:all 0.15s;color:transparent;}
@@ -333,6 +352,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="dnav"><button onclick="changeDay(1)">Next →</button></div>
   </div>
   <div class="tblocks" id="tblocks"></div>
+  <div class="card" style="margin-top:14px;">
+    <div class="card-lbl">🔒 Focus Lock — Jarvis mode</div>
+    <div style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:11px;">Lock yourself onto a task for a set time. Leave the app or switch tabs and an alarm sounds, your phone buzzes, and Jarvis counts it — and the lock won't let go until the timer hits zero. Tap 🔒 on any focus block above to lock straight onto it, or set a custom time here.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <input id="lock-labelin" type="text" placeholder="What are you locking onto?" style="flex:1;min-width:150px;background:#0d0d0d;border:1px solid #2a2a2a;color:#eee;border-radius:8px;padding:9px 11px;font-size:13px;">
+      <input id="lock-mins" type="number" min="1" max="180" value="25" style="width:64px;background:#0d0d0d;border:1px solid #2a2a2a;color:#eee;border-radius:8px;padding:9px;font-size:13px;">
+      <span style="font-size:12px;color:var(--muted);">min</span>
+      <label style="font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;cursor:pointer;"><input id="lock-alarm" type="checkbox" checked> alarm if I leave</label>
+      <button class="lockbtn" style="margin-top:0;" onclick="startManualLock()">Start Focus Lock</button>
+    </div>
+    <div style="font-size:11px;color:#555;margin-top:10px;line-height:1.5;">Heads-up: a website can't force other browser tabs to close — only the desktop Jarvis (<code>jarvis_guardian.py</code>) can actually shut tabs. This web lock keeps you honest with a full-screen timer that survives refresh, an alarm the moment you leave, and an escape counter you have to look at.</div>
+  </div>
   <div class="card" style="margin-top:14px;">
     <div class="card-lbl">Mood Check-in</div>
     <div class="mood-row" id="mood-row">
@@ -772,6 +803,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 </div><!-- end main -->
 </div><!-- end app -->
 
+<!-- FOCUS LOCK OVERLAY -->
+<div id="lock-overlay">
+  <div id="lock-label">🔒 Focus Lock · Jarvis mode</div>
+  <div id="lock-task">Stay on task</div>
+  <div id="lock-count">25:00</div>
+  <div id="lock-escapes"></div>
+  <div id="lock-sub"></div>
+  <button id="lock-unlock" onclick="lockUnlock()">✓ Unlock — block complete</button>
+  <button id="lock-panic" onclick="lockPanic()">emergency exit</button>
+</div>
+
 <!-- SCHEDULE OVERLAY WIDGET -->
 <div id="ov-wrap" style="position:fixed;bottom:20px;right:20px;z-index:99999;touch-action:none;user-select:none;">
   <div id="ov-box" style="width:210px;background:rgba(12,12,12,0.96);border:1px solid rgba(232,197,71,0.45);border-radius:12px;padding:11px 13px;box-shadow:0 4px 28px rgba(0,0,0,0.65);">
@@ -795,31 +837,26 @@ const GEMINI_KEY = "";
 
 // ── SCHEDULE DATA ─────────────────────────────────────────────────────
 const SCHEDULE=[
-  {time:"10:00",title:"Wake up — no phone for 10 mins",tags:["mindset"],desc:"Alarm goes off. Feet hit the floor immediately — no snooze, no negotiation. Walk to the bathroom. Splash cold water on your face 10 times. Look yourself in the mirror and say out loud: 'I am Shabbir. I am going to Tetr. I will be the most prepared person in that room.' Say it out loud — every single day. Then put your phone face-down across the room and do not touch it for 10 full minutes. This one habit separates people who actually transform from people who just intend to."},
-  {time:"10:10",title:"Morning movement — 10 mins",tags:["fitness"],desc:"Do this sequence right now, in your bedroom, no equipment:\n\n① 15 jumping jacks — get your blood moving.\n② 10 push-ups — chest to floor, full range. If you cannot do 10, do as many as you can then finish with knee push-ups.\n③ 10 bodyweight squats — feet shoulder-width, chest tall, go below parallel.\n④ 10 more jumping jacks.\n⑤ 10 more push-ups.\n⑥ 30-second plank — forearms on floor, body straight as a board, squeeze your core and glutes.\n\nThis is not your real workout — it is a biological ignition. Your brain produces BDNF (brain growth protein) with movement. Your focus for the next 4 hours depends on these 10 minutes. Zero excuses."},
-  {time:"10:25",title:"500ml water — right now",tags:["diet"],desc:"Your body just ran 7-8 hours without water. Your brain is 73% water and it is currently dehydrated. Drink 500ml — one full glass or half a bottle — before tea, before breakfast, before anything. Fill it right now and drink all of it. Mental clarity improves within 20 minutes of hydrating after sleep."},
-  {time:"10:30",title:"Breakfast — real food only",tags:["diet"],desc:"Cook and eat one of these — no substitutes:\n\n✓ Option A: 3 scrambled or boiled eggs + 1 banana + glass of milk\n✓ Option B: Oats with milk (no added sugar) + 1 boiled egg on the side\n✓ Option C: 2 eggs any style + whole wheat toast + a piece of fruit\n\nNo biscuits. No sugary tea. No cereal. No skipping. You skip breakfast constantly and by 1pm you are foggy, irritable, and making worse decisions. Protein now = 4 hours of mental clarity. Sit down. Eat."},
-  {time:"11:00",title:"Learning block — 30 mins",tags:["business"],desc:"One subject. One tab. Timer on. Phone in another room.\n\n📅 Monday / Wednesday / Friday: Read 'The Lean Startup' by Eric Ries (free PDF — Google it). One chapter. After reading, write 3 things that apply to makemerevise.com or @TheRashidaDiaries.\n📅 Tuesday / Thursday: Harvard CS50 on YouTube (free — cs50.harvard.edu). One lecture section. You do not need to code — understand how systems think.\n📅 Saturday: One startup story on YouTube — search 'How [company] got their first 1000 users'. Take notes.\n📅 Sunday: Khan Academy Economics — one concept. This is what Tetr professors will assume you know.\n\n30 minutes. No switching tabs. Go."},
-  {time:"11:35",title:"News brief — 20 mins",tags:["business"],desc:"Open the News tab in this app right now. Click 'Load Today's News'. Read every article fully — do not skim.\n\nWhy this matters to you specifically: at Tetr, students casually reference Bloomberg, the FT, and The Economist in conversation. You will be in rooms with people who know what is happening in the world. Right now you do not. 20 minutes of real news every day changes that within 30 days.\n\nAfter reading: close the screen, look up, and explain one story to yourself out loud in 2 sentences from memory. That is how you retain it."},
-  {time:"11:55",title:"Full workout — 50 mins",tags:["fitness"],desc:"Open the Workout tab — today's routine is displayed there (Push / Pull / Legs / Recovery rotates daily). Here is EXACTLY what to do for each:\n\n🔴 PUSH DAY — Chest, Shoulders, Triceps:\n• Dumbbell Floor Press 4×10: Lie flat on floor. Dumbbells at chest width. Press up explosively. Lower in exactly 3 full seconds. Feel the chest stretch at the bottom. 60s rest between sets.\n• Dumbbell Shoulder Press 3×12: Seated. Dumbbells at shoulder height. Press straight overhead until arms are fully extended. Lower in 3 seconds — do not drop fast. 60s rest.\n• Lateral Raises 3×15: Stand, arms slightly bent. Raise to shoulder height in 1 second. Lower in 3 seconds. Do NOT swing. 45s rest.\n• Tricep Overhead Extension 3×12: Both hands gripping one dumbbell behind your head. Elbows close to ears — they do not flare. Extend fully up, lower until you feel the stretch. 60s rest.\n• Push-ups to failure — 3 sets: Go until you genuinely cannot. Record your max number this week and beat it next week.\n\n🔵 PULL DAY — Back, Biceps:\n• Pull-ups or Negatives 4 sets max: Full pull-up = dead hang, pull until chin clears bar, lower controlled. Cannot do full ones? Jump to top (chin over bar) and lower yourself in 5 full seconds — that is a negative. 5 negatives per set. 90s rest.\n• Bent-Over Dumbbell Row 4×12 each arm: Hinge at 45 degrees, one hand on knee for support. Pull dumbbell to hip. Squeeze shoulder blade at the top for 1 second. 60s rest.\n• Dumbbell Bicep Curls 3×12: Start from full extension. Curl up in 1s, lower in 3s. No swinging — if you are swinging, the weight is too heavy. 60s rest.\n• Dead Hangs 3×30 seconds: Just hang from bar, full grip. Builds grip strength and decompresses your spine. 45s rest.\n\n🟢 LEGS + CORE DAY:\n• Goblet Squat 4×15: Hold one dumbbell at your chest. Feet shoulder-width. Go below parallel — thighs below knees. Chest tall throughout. Drive through your heels to stand. 60s rest.\n• Dumbbell Lunges 3×12 each leg: Step forward, lower back knee to just above the floor. Front shin stays vertical. Drive through your front heel to return. 60s rest.\n• Romanian Deadlift 3×12: Dumbbells in front of thighs. Hinge at hips — push hips back, lower weights along your legs. Feel the hamstring stretch. Stop when your back starts to round. 60s rest.\n• Plank 3×45 seconds: Forearms flat. Body is a straight line from head to heels. Squeeze glutes. Breathe steadily. If lower back aches, raise hips slightly.\n• Crunches 3×25: Lie flat, knees bent, hands lightly behind ears. Crunch until shoulder blades leave floor. 1-second hold at top. Controlled down. Do NOT yank your neck.\n\n🟡 RECOVERY DAY:\n• Punching bag 6×2 mins with 1 min rest.\n• Light dumbbell circuit: 10 curls + 10 shoulder press + 10 rows + 30s plank. 2 rounds, no rest.\n• 10-min full body stretch (YouTube: 'beginner full body stretch 10 minutes').\n\nNo break longer than 90 seconds. Set a timer for the full 50 minutes. Phone is only for the timer."},
-  {time:"12:50",title:"Shower + dress with intention",tags:["mindset"],desc:"Shower now. End with cold water for at least 30 seconds — this closes your pores and triggers an alertness response. Then dress in real clothes. Not loungewear. Not pyjamas. Actual clothes you would leave the house in.\n\nYou are Shabbir — co-founder, content creator, Tetr-bound. Dress that version of you, not the version that is comfortable being average. Research shows how you dress directly changes your cognitive performance and your confidence. This takes 20 minutes. Do it."},
-  {time:"13:10",title:"Deep work — 2 hours",tags:["business"],desc:"The most important 2 hours of your day. ONE task. No switching. Phone in another room. No music with lyrics. Timer set for exactly 2 hours.\n\nChoose ONE based on what is most urgent this week:\n\n📝 Option A — Content for @TheRashidaDiaries: Write 3 complete, ready-to-post pieces. Not drafts — finished. Research hook, write body, write caption. Three pieces in 2 hours is achievable.\n\n💻 Option B — makemerevise.com: One specific feature or fix. Open the file, write, build. Do not plan during this block — execute only.\n\n📧 Option C — Cold outreach: DM 10 potential brand partners on Instagram or LinkedIn. Each DM must be personalised — reference their last post or specific product. Copy-paste DMs get ignored. Personalised ones get replies.\n\nThe rule: if you open Instagram, switch tabs, or 'just check' anything — the 2-hour timer resets. This is the discipline that separates Tetr students who build real things from those who just talk about it."},
-  {time:"15:15",title:"500ml water",tags:["diet"],desc:"You are at 1 litre total. Tap the glass in the Workout tab to track it. This water break also marks the end of your deep work block — stand up, stretch your back, walk to the kitchen, drink the full glass. 1.5 litres still to go for the day."},
-  {time:"15:25",title:"Lunch — no processed food",tags:["diet"],desc:"Cook and eat one of these:\n\n✓ Dal + brown rice + any vegetable sabzi\n✓ Roti + scrambled eggs + cucumber and tomato\n✓ Grilled or boiled chicken + rice + salad\n✓ Paneer bhurji + 2 roti + vegetables\n\nNo fried food. No soda. No white bread. No 'I will eat later' — you won't, and your afternoon will fall apart.\n\nSit down. No screen while eating. 30 minutes where your body digests and your brain decompresses. You skip meals constantly. It is making your focus weaker and your body weaker. That stops today."},
-  {time:"15:55",title:"Social reach-out — 1 person",tags:["social"],desc:"Open LinkedIn, Instagram DMs, or WhatsApp. Message ONE person — just one. It can be:\n\n• An old classmate you've lost touch with\n• A founder or creator you genuinely follow and respect\n• Someone from a startup Discord or Reddit community\n• A Tetr student — search 'Tetr College of Business' on LinkedIn and connect with a current student\n\nExact message: 'Hey [name], saw your [post / project / profile] — genuinely interesting. Wanted to connect.' That is all. Do not overthink it.\n\nBy the time you arrive at Tetr you should have 30 warm connections you have actually spoken to. That is 30 messages — one a day for 30 days. Today is day [current day]. Send it now."},
-  {time:"16:20",title:"Quran revision — 25 mins",tags:["quran"],desc:"See the Quran tab for today's Juz assignment. Exact method — do not skip steps:\n\n① Open Quran.com on your phone\n② Go to today's assigned ayahs (Quran tab tells you which ones)\n③ Listen to Sheikh Mishary Al-Afasy's recitation — 3 full times, eyes on the Arabic text the entire time\n④ Read along with him twice — your lips must move, following every word\n⑤ Close the screen. Recite from memory. Check yourself against the text.\n⑥ Any ayah you stumbled on: repeat it alone 10 more times minimum before moving on\n\nOnce per week: record yourself reciting one full page on your phone voice memo. Listen back. This catches Tajweed errors you cannot hear in real time.\n\nYou memorised the full Quran. It is already in your memory. You are not re-learning — you are unlocking what already exists. Trust this."},
-  {time:"16:50",title:"Rest walk — 15 mins, no phone",tags:["mindset"],desc:"Walk outside, around your building, or on your balcony. Phone stays inside. Hands empty. Eyes forward.\n\nYour brain has been in input mode since 10am. It needs 15 minutes to process and consolidate. Scientists call this 'diffuse mode thinking' — it is when your brain makes connections between things you have already learned. The ideas that come to you on this walk are real insights. Some of your best ones will arrive here.\n\nNo podcast. No music. No phone. Just 15 minutes of you and your own thoughts. This is not optional."},
-  {time:"17:10",title:"Arabic — 20 mins",tags:["language"],desc:"Open the Languages tab for today's module. Exact daily routine:\n\nMinutes 1-10: Duolingo Arabic — one full lesson. Do not rush through for the streak. Actually say the words out loud. Pronunciation matters from day one.\n\nMinutes 11-20: Physical notebook. Write 5 new Arabic words from today's lesson — write each word 3 times. Then write one Arabic sentence using any word you know. It does not have to be perfect. It has to be real.\n\nWeek 1 core words: أنا (ana - I), أنتَ (anta - you), هذا (hatha - this), ماذا (matha - what), كيف (kayfa - how), شكراً (shukran - thank you), نعم (na'am - yes), لا (la - no), من فضلك (min fadlak - please), أين (ayna - where)."},
-  {time:"17:35",title:"Spanish — 20 mins",tags:["language"],desc:"Open the Languages tab for today's module. Exact routine:\n\nMinutes 1-13: Language Transfer Complete Spanish — one episode. It is free on YouTube (search 'Language Transfer Complete Spanish'). Start from Episode 1. Progress in order. When the teacher asks you to form a sentence — pause the audio and actually say it out loud before he gives the answer. Passive listening is worthless.\n\nMinutes 14-20: Duolingo Spanish — 5 minutes of reinforcement only.\n\nWeek 1 essentials: yo (I), tú (you), quiero (I want), necesito (I need), tengo (I have), puedo (I can), ¿cómo te llamas? (what is your name?), me llamo Shabbir (my name is Shabbir), soy de Dubai (I am from Dubai), ¿hablas inglés? (do you speak English?).\n\nSpeak out loud — always. Spanish reads exactly as it sounds. This is the easiest language you will ever learn."},
-  {time:"17:55",title:"Learning block 2 — 90 mins",tags:["business"],desc:"Second deep learning block. Different subject from this morning.\n\n📅 Monday: Watch one TED Talk on entrepreneurship (YouTube: 'best TED talks entrepreneurship 2024'). Watch fully. Write 3 specific takeaways that apply to your life — not general notes.\n📅 Tuesday: Read one TechCrunch or YCombinator article about a startup. Understand exactly how they make money.\n📅 Wednesday: Coursera Business Foundations — Wharton School (audit for free, zero payment). One video. Take notes. This is literally Wharton MBA content at no cost.\n📅 Thursday: HubSpot Academy — pick one free certification course. Marketing, Sales, or Business. 90 minutes gets you a real credential.\n📅 Friday: Apply this week's learning to @TheRashidaDiaries or makemerevise.com. Write one page of specific improvements.\n📅 Saturday: Research one Tetr student or alumni on LinkedIn. What are they building? What can you learn from their path?\n📅 Sunday: Review your notes from the entire week. What is one idea that changed how you think?"},
-  {time:"19:30",title:"Punching bag — 20 mins",tags:["fitness"],desc:"This is where everything goes — the frustration, the self-doubt, the fear of not being ready. Hit it.\n\nExact routine — set your phone timer:\n\nRound 1 — 3 minutes, Jab-Cross only:\nLeft jab = quick snap, arm extends fully, return immediately. Right cross = rotate hips, full power from your core. Breathe OUT hard on every single strike. Move your feet between combinations — side to side, small steps — never stand flat-footed. 1 minute rest.\n\nRound 2 — 3 minutes, Jab-Cross-Hook:\nAdd left hook after each cross. Rotate your torso on the hook — your power comes from hip rotation, not just your arm. Feel the difference. 1 minute rest.\n\nRound 3 — 3 minutes, everything:\nJab-Cross-Hook-Uppercut. Uppercut = bend knees, drive up from your legs, short sharp punch angled upward. Mix all combinations. Move constantly. This is where you go hardest. Hit it like it owes you something. 1 minute rest.\n\nCooldown — 2 minutes: Light jabs only. Slow. Let your heart rate drop naturally. Shake your arms out."},
-  {time:"19:55",title:"Pull-ups + core — 20 mins",tags:["fitness"],desc:"Pull-up bar — 3 working sets:\n\nGrip the bar slightly wider than shoulder-width. Start from a dead hang — arms fully extended. Pull until your chin is clearly above the bar. Lower yourself controlled — do not drop. That is one rep.\n\nIf you can only do 1-3 full pull-ups: finish each set with negatives. Jump or step to the top position (chin over bar), then lower yourself as slowly as you can — aim for 5 full seconds going down. 3-5 negatives per set. Every rep builds toward the full movement.\n\nRest 90 seconds between pull-up sets.\n\nCore circuit — 2 rounds, no rest between exercises (30s rest between rounds):\n① Crunches × 25: Hands lightly behind ears. Shoulders come off the floor. 1-second hold at top. Controlled down. Eyes on ceiling — do not pull your neck.\n② Plank × 45 seconds: Forearms flat. Body a straight line. Squeeze glutes and core. Breathe steadily.\n③ Leg raises × 15: Lie flat, legs straight. Raise feet to 90 degrees. Lower slowly without feet touching the floor. This hits your lower abs — the hardest part to develop.\n④ Bicycle crunches × 20: Alternating elbow to opposite knee. Controlled rotation. Do not rush.\n\nYour visible abs are built here. You will not see them for 3 weeks. Build them every day anyway."},
-  {time:"20:20",title:"Income work — 60 mins",tags:["business"],desc:"One focused hour that changes your financial situation before university. Phone notifications off. Timer on.\n\n📅 Week 1 — Brand outreach for @TheRashidaDiaries:\nDM 5 brands today. Instagram DMs or LinkedIn messages — not email, DMs are faster. Each message must be personalised: 'Hi [brand], I run @TheRashidaDiaries — we cover [relevant topic] and your [specific product] fits our audience perfectly. Would love to discuss a collaboration.' Change the last sentence for each brand. Generic = ignored. Personal = replied to.\n\n📅 Week 2 — Digital product research:\nWhat do you know that someone would pay to learn? Starting a content platform from zero? Preparing for Tetr? Learning Arabic fast? Write 3 product ideas. Research if similar products exist and at what price point on Gumroad.com.\n\n📅 Week 3 — Build your offer:\nTake your strongest idea from Week 2. Write a one-page document: what you are selling, exactly who it helps, and what they get. Keep it simple. This is your product brief.\n\n📅 Week 4 — Launch:\nPost about it publicly. DM 10 people who might want it. List it on Gumroad (free) or Payhip (free). Tell people. Your first pound or dollar earned online changes your entire mental model of what is possible."},
-  {time:"21:25",title:"Reading — 20 mins",tags:["mindset"],desc:"Physical book or PDF. Not an audiobook — reading builds different concentration than listening.\n\nWeek 1-2: Atomic Habits by James Clear (free PDF — Google it). One concept per session. After reading, write one sentence: what single habit will you change based on this chapter?\n\nWeek 3-4: How to Win Friends and Influence People by Dale Carnegie (free PDF). Every principle is something you can test the next day with real people.\n\nRule: only underline things that are specifically relevant to you right now — to Shabbir, 18 years old, running a platform, going to Tetr. If you cannot connect what you are reading to your actual life, keep reading until you find something you can apply tomorrow."},
-  {time:"21:50",title:"Dinner + final 500ml water",tags:["diet"],desc:"Cook one of these:\n\n✓ Grilled or boiled chicken, eggs, or paneer + any vegetable + small portion of rice or roti\n✓ Dal + roti + cucumber and tomato salad\n✓ 3-egg omelette + whole wheat toast + a piece of fruit\n\nNo sugary dessert. If you want something sweet: 2 dates, a banana, or one square of dark chocolate.\n\nDrink your final 500ml of water with dinner. That completes your 3 litres for the day.\n\nSit down. No screen while eating. 15 minutes for your body to digest and your mind to decompress before wind-down."},
-  {time:"22:10",title:"App check-in + reflection",tags:["mindset"],desc:"Open this app. Check off every task you actually completed today — be completely honest. Do not tick something you did not finish.\n\nWrite one sentence in the reflection box. Make it honest:\n• 'Skipped lunch but did the full workout and both deep work blocks.'\n• 'Opened Instagram during deep work block — lost 25 minutes. Will put phone in another room tomorrow.'\n• 'Sent 5 brand DMs for the first time. It felt uncomfortable. I did it anyway.'\n\nHonest reflection in 2 minutes is worth more than an hour of planning. Look at today's completion rate: is this the version of you that is ready to walk into Tetr?"},
-  {time:"22:25",title:"Wind down — screens off by 22:30",tags:["mindset"],desc:"Dim your room lights. Phone goes to another room — not on your nightstand.\n\nFor the next 20 minutes:\n✓ Do: Read your physical book. Lie quietly. Light stretching. Think through tomorrow.\n✗ Do not: Check Instagram. Watch YouTube. Scroll anything. Text anyone non-urgently.\n\nBlue light from screens suppresses your sleep hormone (melatonin) for up to 90 minutes. Protecting this wind-down protects your 10 AM wake-up — because poor sleep is the number one reason people skip their morning routine.\n\nBefore putting the phone down: set your 10:00 AM alarm for tomorrow."},
-  {time:"22:45",title:"Sleep",tags:["mindset"],desc:"Lights out. 10:00 AM wake-up needs 10:45 PM sleep to get 7+ hours.\n\nIf your mind is racing: box breathing. In for 4 counts → hold for 4 → out for 4 → hold for 4. Repeat 10 times. Your nervous system cannot stay activated during this pattern — it is physiologically impossible.\n\nSleep is when your muscles grow from today's workout. It is when your brain consolidates everything you learned. It is when your memory processes and stores today's Quran revision. Protecting sleep is protecting every other block in this schedule. 7.5 hours minimum. Non-negotiable."},
+  {time:"10:00",title:"Wake + set intention",tags:["mindset"],desc:"Feet on the floor the moment the alarm goes — no snooze. Cold water on the face. Look in the mirror and say it out loud: 'I am Shabbir. I am going to Tetr. I will be the most prepared person in that room.' Then put the phone face-down across the room for 10 minutes. The whole day is downstream of how you start it."},
+  {time:"10:10",title:"Morning ignition — 10 min",tags:["fitness"],desc:"Wake the body up. No equipment:\n① 15 jumping jacks\n② 10 push-ups (full range)\n③ 10 squats (below parallel)\n④ 15 jumping jacks\n⑤ 30s plank\n\nThis is not the real workout — it is the switch that turns your brain on. Movement releases BDNF and your focus for the next 4 hours depends on these 10 minutes."},
+  {time:"10:25",title:"500ml water + real breakfast",tags:["diet"],desc:"Drink a full glass of water before anything else — your brain is dehydrated after sleep. Then eat real protein: 3 eggs + banana + milk, or oats + egg, or eggs + toast + fruit. No biscuits, no sugary tea, no skipping. Protein now = 4 hours of clean focus."},
+  {time:"11:00",title:"Quran revision — 30 min",tags:["quran"],focus:true,desc:"Open the Quran tab for today's assignment, then:\n① Listen to Sheikh Mishary's recitation 3x, eyes on the Arabic.\n② Read along twice, lips moving.\n③ Close the screen and recite from memory.\n④ Any ayah you stumble on — repeat it 10x before moving on.\n\nYou already memorised it. You are not re-learning, you are unlocking. Lock in and do not let anything pull you away."},
+  {time:"11:35",title:"News brief — 20 min",tags:["news"],focus:true,desc:"Open the News tab and load today's brief. Read every article fully — do not skim. At Tetr, people casually reference the FT, Bloomberg and The Economist. 20 real minutes a day closes that gap inside a month. After reading, look up and explain one story out loud from memory in two sentences."},
+  {time:"11:55",title:"Reset break — 15 min, no phone",tags:["break"],desc:"You earned this. Step away from every screen. Stretch, look out a window, make a tea, breathe. No phone, no scrolling — that is not a break, it is more input. Let the morning's work settle. A real pause here is what stops the day from feeling like a grind by 4pm."},
+  {time:"12:10",title:"Deep work — BUILD the app — 90 min",tags:["build"],focus:true,desc:"The most important block of the day. ONE task on makemerevise.com. No switching, no 'just checking'. Phone in another room. Timer for 90 minutes.\n\nPick one and execute (do not plan here):\n• Ship one specific feature or fix\n• Rebuild one screen properly\n• Fix the top bug your users hit\n\nTurn on Focus Lock for this block — if you leave, Jarvis will know. This is where the company actually gets built."},
+  {time:"13:40",title:"Lunch + decompress",tags:["diet"],desc:"Real food, no processed junk: dal + rice + sabzi, or chicken + rice + salad, or paneer + roti + veg. No fried food, no soda. Sit down, no screen while you eat. 30 minutes for your body to digest and your mind to reset before the afternoon."},
+  {time:"14:25",title:"Content creation — 75 min",tags:["content"],focus:true,desc:"Make something today — do not just consume. 75 focused minutes for @TheRashidaDiaries.\n\nThe goal: finish, do not just draft.\n• Write and finish 2-3 ready-to-post pieces (hook + body + caption), or\n• Film and edit one short, or\n• Batch a week of captions\n\nFocus Lock on. One tab. Done beats perfect — ship it."},
+  {time:"15:40",title:"Rest walk — 20 min",tags:["break"],desc:"Walk outside or around the building. Phone stays inside, hands empty, eyes forward. Your brain has been in input mode for hours — this is when it quietly connects ideas (diffuse-mode thinking). Some of your best ideas land on this walk. No podcast, no music. Just you."},
+  {time:"16:00",title:"FULL WORKOUT — 50 min",tags:["fitness"],focus:true,desc:"This is non-negotiable. Exercise is the engine for everything else. Open the Workout tab — today's split (Push / Pull / Legs / Recovery) is shown there with exact sets, reps and tempo.\n\nRules: no rest longer than 90s, timer set for the full 50 minutes, phone only used as the timer. Beat last week's numbers where you can. Train like the person you are becoming, not the one you were."},
+  {time:"16:55",title:"Shower (cold finish) + water",tags:["mindset"],desc:"Shower now, end with 30s of cold — it triggers alertness and resets you for the second half of the day. Drink 500ml. Then put on real clothes, not loungewear. How you dress changes how you perform. Show up as the founder, not the version that is comfortable being average."},
+  {time:"17:20",title:"Build / ship session 2 — 75 min",tags:["build"],focus:true,desc:"Second build block — keep the momentum on makemerevise.com. Different task from the morning: testing, polishing, deploying, or answering real users. Whatever moves the product one real step forward.\n\nFocus Lock on. This is the difference between people at Tetr who build real things and people who only talk about it."},
+  {time:"18:35",title:"Break — 20 min",tags:["break"],desc:"Step back. Eyes off the screen. Stretch your back and neck, get some water, sit by a window. You have done deep work, content and a full workout today — let it land. Resting on purpose is what keeps the whole system sustainable instead of a burnout sprint."},
+  {time:"18:55",title:"Language practice — 20 min (optional)",tags:["language"],desc:"Open the Languages tab. 10 minutes Arabic, 10 minutes Spanish — or just one if energy is low. Say every word out loud; pronunciation matters from day one. This one is optional on heavy days — skipping it guilt-free is allowed. Protecting your energy is part of the plan."},
+  {time:"19:15",title:"Dinner + water",tags:["diet"],desc:"Grilled chicken / eggs / paneer + veg + a small portion of rice or roti. Something sweet? 2 dates or one square of dark chocolate. Drink your last 500ml with dinner to finish your water for the day. Sit down, no screen, 15 minutes to decompress."},
+  {time:"20:00",title:"Reading — Robert Greene, 15 pages",tags:["read"],focus:true,desc:"Physical book or PDF — not audio. Reading builds a different kind of focus than listening.\n\nBook: Robert Greene — 'Mastery' (or 'The Laws of Human Nature' / 'The 48 Laws of Power' if you prefer). Read 15 pages, every single day. No exceptions — 15 pages is small enough that you never get to say you were too tired.\n\nAfter reading, write ONE sentence: what from these pages applies to you — to Shabbir, building companies, heading to Tetr — tomorrow? If you cannot connect it, keep reading until you can."},
+  {time:"20:35",title:"Income / outreach — 45 min",tags:["business"],focus:true,desc:"One focused hour on money before university. Notifications off, timer on.\n• Brand outreach: DM 5 brands for @TheRashidaDiaries — each message personalised, referencing their actual product. Generic gets ignored; personal gets replied to.\n• Or build/refine a digital product you could sell on Gumroad.\n\nFocus Lock on. Your first pound earned online changes your entire sense of what is possible."},
+  {time:"21:20",title:"Punching bag + core — 30 min",tags:["fitness"],desc:"Everything left in the tank goes here — the doubt, the pressure, the fear of not being ready. Hit it.\n3 rounds x 3 min (jab-cross, add hook, then everything), 1 min rest between. Breathe out hard on every strike, move your feet, never stand flat.\nFinish with core: 25 crunches, 45s plank, 15 leg raises, 20 bicycle crunches x 2 rounds."},
+  {time:"21:55",title:"Check-in + reflection",tags:["mindset"],desc:"Open this app and honestly check off everything you actually finished — do not tick what you did not do. Write one honest sentence in the reflection box: what went well, what slipped, what you fix tomorrow. Two minutes of honesty beats an hour of planning. Then rest — you have earned tomorrow."},
 ];
 
 const WORKOUTS=[
@@ -1027,6 +1064,7 @@ function renderSchedule(){
       <div class="tb-tags">${b.tags.map(t=>`<span class="tag tag-${t}">${t}</span>`).join('')}</div>
       <div class="tb-title">${b.title}</div>
       <div class="tb-desc">${b.desc}</div>
+      ${b.focus?`<button class="lockbtn" onclick="lockBlock(${i})">🔒 Focus Lock this block</button>`:''}
     </div>
     <div class="chk${ck?' done':''}" onclick="toggleCheck(${i})">${ck?'✓':''}</div>`;
     container.appendChild(div);
@@ -1655,6 +1693,134 @@ function cycleJuzState(n){
   }
   ovUpdate();
   setInterval(ovUpdate,60000);
+})();
+
+// ══════════════════════════════════════════════════════════════════════
+// FOCUS LOCK ("Jarvis mode")
+// Locks you onto one task for a set time. Survives refresh (stored in
+// localStorage), sounds an alarm + vibrates when you leave the tab, and
+// counts every escape. A web page cannot force other tabs shut — only the
+// desktop jarvis_guardian.py can do that — so this is the strongest a
+// browser can enforce: you have to stare the timer (and your escapes) down.
+// ══════════════════════════════════════════════════════════════════════
+(function(){
+  const LK='gauntlet_lock';
+  let timer=null, ac=null;
+  function get(){try{return JSON.parse(localStorage.getItem(LK)||'null');}catch(e){return null;}}
+  function set(o){try{localStorage.setItem(LK,JSON.stringify(o));}catch(e){}}
+  function wipe(){try{localStorage.removeItem(LK);}catch(e){}}
+  function beep(){
+    try{
+      ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+      if(ac.state==='suspended')ac.resume();
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.connect(g);g.connect(ac.destination);
+      o.type='square';o.frequency.setValueAtTime(880,ac.currentTime);
+      o.frequency.setValueAtTime(620,ac.currentTime+0.16);
+      g.gain.setValueAtTime(0.2,ac.currentTime);
+      o.start();o.stop(ac.currentTime+0.42);
+    }catch(e){}
+    try{if(navigator.vibrate)navigator.vibrate([200,80,200,80,420]);}catch(e){}
+  }
+  function fmt(ms){
+    if(ms<0)ms=0;
+    const s=Math.round(ms/1000),m=Math.floor(s/60);
+    return String(m).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  }
+  function escMsg(lk){
+    if(!lk||!lk.escapes)return'';
+    return'⚠ Jarvis saw you leave '+lk.escapes+' time'+(lk.escapes>1?'s':'')+'. Get back to it.';
+  }
+  function onHide(){
+    const lk=get();if(!lk||lk.until-Date.now()<=0)return;
+    if(document.hidden && lk.alarm!==false){
+      lk.escapes=(lk.escapes||0)+1;set(lk);
+      beep();
+      const ov=document.getElementById('lock-overlay');if(ov)ov.classList.add('alarm');
+    }
+  }
+  function onShow(){
+    if(document.hidden)return;
+    const lk=get();const ov=document.getElementById('lock-overlay');
+    if(ov)setTimeout(()=>ov.classList.remove('alarm'),250);
+    const e=document.getElementById('lock-escapes');if(e)e.textContent=escMsg(lk);
+  }
+  function tick(){
+    const lk=get(),ov=document.getElementById('lock-overlay');
+    if(!lk||!ov)return;
+    const left=lk.until-Date.now();
+    const t=document.getElementById('lock-task');if(t)t.textContent=lk.label||'Stay on task';
+    const c=document.getElementById('lock-count');if(c)c.textContent=fmt(left);
+    if(!document.hidden){const e=document.getElementById('lock-escapes');if(e)e.textContent=escMsg(lk);}
+    if(left<=0){
+      if(c)c.textContent='00:00';
+      const u=document.getElementById('lock-unlock');if(u)u.style.display='inline-block';
+      const s=document.getElementById('lock-sub');if(s)s.textContent='Block complete. You stayed the whole time — that is the rep that counts. Tap to unlock.';
+      if(timer){clearInterval(timer);timer=null;}
+    }
+  }
+  window.engageLock=function(){
+    const lk=get(),ov=document.getElementById('lock-overlay');
+    if(!lk||!ov)return;
+    if(lk.until-Date.now()<=0){wipe();return;}
+    ov.classList.add('on');
+    const u=document.getElementById('lock-unlock');if(u)u.style.display='none';
+    const s=document.getElementById('lock-sub');
+    if(s)s.innerHTML='Stay on <b>'+(lk.label||'your task')+'</b> until this hits zero. Leave the tab and the alarm sounds and it gets counted. You set this — keep your word.';
+    try{(ov.requestFullscreen||ov.webkitRequestFullscreen||function(){}).call(ov);}catch(e){}
+    try{if(navigator.wakeLock&&navigator.wakeLock.request)navigator.wakeLock.request('screen').catch(()=>{});}catch(e){}
+    if(timer)clearInterval(timer);
+    timer=setInterval(tick,500);tick();
+  };
+  window.startLock=function(label,minutes,alarm){
+    minutes=Math.max(1,Math.round(minutes||0));
+    set({until:Date.now()+minutes*60000,label:label||'Focus block',alarm:alarm!==false,escapes:0});
+    engageLock();
+  };
+  window.lockBlock=function(i){
+    const b=SCHEDULE[i];if(!b)return;
+    let mins=45;const nx=SCHEDULE[i+1];
+    if(nx){
+      const p=nx.time.split(':').map(Number);
+      const end=new Date();end.setHours(p[0],p[1],0,0);
+      const d=(end-Date.now())/60000;
+      if(d>1&&d<240)mins=Math.round(d);
+    }
+    if(!confirm('Lock onto "'+b.title+'" for '+mins+' minutes?\n\nJarvis mode: leave this tab and an alarm sounds + it gets counted. You cannot dismiss the lock until the timer ends.'))return;
+    startLock(b.title,mins,true);
+  };
+  window.startManualLock=function(){
+    const mEl=document.getElementById('lock-mins');
+    const mins=parseInt(mEl&&mEl.value,10)||25;
+    const alarm=document.getElementById('lock-alarm');
+    const lbl=document.getElementById('lock-labelin');
+    startLock((lbl&&lbl.value.trim())||'Focus block',mins,!alarm||alarm.checked);
+  };
+  window.lockUnlock=function(){
+    const lk=get();
+    if(lk&&lk.until-Date.now()>0)return;
+    wipe();
+    const ov=document.getElementById('lock-overlay');if(ov)ov.classList.remove('on');
+    if(timer){clearInterval(timer);timer=null;}
+    try{if(document.fullscreenElement)document.exitFullscreen();}catch(e){}
+  };
+  window.lockPanic=function(){
+    const a=prompt('Emergency exit — this breaks your lock early and Jarvis logs it as quitting.\n\nType QUIT in capitals to give up this block:');
+    if(a==='QUIT'){
+      wipe();
+      const ov=document.getElementById('lock-overlay');if(ov)ov.classList.remove('on');
+      if(timer){clearInterval(timer);timer=null;}
+      try{if(document.fullscreenElement)document.exitFullscreen();}catch(e){}
+    }
+  };
+  document.addEventListener('visibilitychange',function(){document.hidden?onHide():onShow();});
+  window.addEventListener('blur',onHide);
+  window.addEventListener('beforeunload',function(e){
+    const lk=get();
+    if(lk&&lk.until-Date.now()>0){e.preventDefault();e.returnValue='Focus Lock is active — leaving counts as quitting your block.';return e.returnValue;}
+  });
+  // Re-engage if a lock survived a refresh / tab switch
+  engageLock();
 })();
 
 // ══════════════════════════════════════════════════════════════════════
